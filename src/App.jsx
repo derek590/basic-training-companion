@@ -559,7 +559,7 @@ function BranchSelector({ onSelect }) {
   return (
     <div style={{minHeight:"100vh",background:"#0a0f1a",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"2rem",fontFamily:"Georgia,serif"}}>
       <div style={{textAlign:"center",marginBottom:"2.5rem"}}>
-        <div style={{fontSize:"3rem",marginBottom:"0.5rem"}}>Stars</div>
+        <div style={{color:"#fff", fontSize:"3rem",marginBottom:"0.5rem"}}>Stars</div>
         <h1 style={{color:"#fff",fontSize:"clamp(1.7rem,4vw,2.7rem)",fontWeight:"700",letterSpacing:"0.05em",margin:0}}>Basic Training Companion</h1>
         <p style={{color:"#8a9bb0",fontSize:"0.95rem",marginTop:"0.6rem",fontStyle:"italic"}}>For the families who wait, worry, and beam with pride</p>
         <div style={{width:"60px",height:"3px",background:"linear-gradient(90deg,#c8a84b,#4a90d9)",margin:"1.25rem auto 0"}}/>

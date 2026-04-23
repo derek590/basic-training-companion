@@ -2,6 +2,7 @@
     {
         "id": "army",
         "name": "Army",
+        "icon": "🟢",
         "fullName": "United States Army",
         "trainingName": "Basic Combat Training (BCT)",
         "colors": {
@@ -54,21 +55,113 @@
             { "term": "Black Phase", "def": "Weeks 8-10: Advanced tactics and graduation prep" }
         ],
         "weeklyEvents": [
-            { "week": 1, "title": "Reception Week", "events": ["In-processing", "Medical screenings", "Haircuts", "Uniform issue", "Initial PT assessment"] },
-            { "week": 2, "title": "Blue Phase Begins", "events": ["Drill and ceremony", "First aid training", "Core values instruction", "Physical fitness routines begin"] },
-            { "week": 3, "title": "Physical Conditioning", "events": ["Advanced PT", "Obstacle courses", "Land navigation intro", "Team-building exercises"] },
-            { "week": 4, "title": "Red Phase - Combat Skills", "events": ["Rifle marksmanship begins", "Pugil stick training", "Combatives (hand-to-hand)", "NBC Chemical training"] },
-            { "week": 5, "title": "Weapons Qualification", "events": ["M16/M4 qualification", "Grenade training", "Field exercises", "Night operations intro"] },
-            { "week": 6, "title": "White Phase - Field Training", "events": ["Extended field exercises", "Tactical movement", "Patrol techniques", "Survival skills"] },
-            { "week": 7, "title": "Advanced Field Operations", "events": ["Live-fire exercises", "ACFT practice", "Leadership challenges", "Buddy team exercises"] },
-            { "week": 8, "title": "Black Phase Begins", "events": ["Advanced tactical ops", "ACFT official test", "Final weapons qual", "Senior leadership mentoring"] },
-            { "week": 9, "title": "Victory Forge Prep", "events": ["Final field training exercise", "Culminating event prep", "Letter writing final", "Family contact window"] },
-            { "week": 10, "title": "Graduation Week", "events": ["Victory Forge completion", "Transition to AIT briefings", "Graduation ceremony", "Family Day activities"] }
+            {
+                "week": 1,
+                "title": "Reception Week",
+                "events": [
+                    { "name": "In-processing", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Medical screenings", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" },
+                    { "name": "Haircuts", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Uniform issue", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Initial PT assessment", "url": "https://www.army.mil/acft/" }
+                ]
+            },
+            {
+                "week": 2,
+                "title": "Blue Phase Begins",
+                "events": [
+                    { "name": "Drill and ceremony", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "First aid training", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" },
+                    { "name": "Core values instruction", "url": "https://www.army.mil/values/" },
+                    { "name": "Physical fitness routines begin", "url": "https://www.army.mil/acft/" }
+                ]
+            },
+            {
+                "week": 3,
+                "title": "Physical Conditioning",
+                "events": [
+                    { "name": "Advanced PT", "url": "https://www.army.mil/acft/" },
+                    { "name": "Obstacle courses", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Land navigation intro", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Team-building exercises", "url": "https://www.goarmy.com/army-life/basic-training" }
+                ]
+            },
+            {
+                "week": 4,
+                "title": "Red Phase - Combat Skills",
+                "events": [
+                    { "name": "Rifle marksmanship begins", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Pugil stick training", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Combatives (hand-to-hand)", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "NBC Chemical training", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" }
+                ]
+            },
+            {
+                "week": 5,
+                "title": "Weapons Qualification",
+                "events": [
+                    { "name": "M16/M4 qualification", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Grenade training", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Field exercises", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Night operations intro", "url": "https://www.goarmy.com/army-life/basic-training" }
+                ]
+            },
+            {
+                "week": 6,
+                "title": "White Phase - Field Training",
+                "events": [
+                    { "name": "Extended field exercises", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Tactical movement", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Patrol techniques", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Survival skills", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" }
+                ]
+            },
+            {
+                "week": 7,
+                "title": "Advanced Field Operations",
+                "events": [
+                    { "name": "Live-fire exercises", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "ACFT practice", "url": "https://www.army.mil/acft/" },
+                    { "name": "Leadership challenges", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Buddy team exercises", "url": "https://www.goarmy.com/army-life/basic-training" }
+                ]
+            },
+            {
+                "week": 8,
+                "title": "Black Phase Begins",
+                "events": [
+                    { "name": "Advanced tactical ops", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "ACFT official test", "url": "https://www.army.mil/acft/" },
+                    { "name": "Final weapons qual", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Senior leadership mentoring", "url": "https://www.goarmy.com/army-life/basic-training" }
+                ]
+            },
+            {
+                "week": 9,
+                "title": "Victory Forge Prep",
+                "events": [
+                    { "name": "Final field training exercise", "url": "https://sill-www.army.mil/434/ten-week-journey/" },
+                    { "name": "Culminating event prep", "url": "https://sill-www.army.mil/434/ten-week-journey/" },
+                    { "name": "Letter writing final", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Family contact window", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" }
+                ]
+            },
+            {
+                "week": 10,
+                "title": "Graduation Week",
+                "events": [
+                    { "name": "Victory Forge completion", "url": "https://sill-www.army.mil/434/ten-week-journey/" },
+                    { "name": "Transition to AIT briefings", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Graduation ceremony", "url": "https://www.goarmy.com/army-life/basic-training" },
+                    { "name": "Family Day activities", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" }
+                ]
+            }
         ]
     },
     {
         "id": "airforce",
         "name": "Air Force",
+        "icon": "🔵",
         "fullName": "United States Air Force",
         "trainingName": "Basic Military Training (BMT)",
         "colors": {
@@ -109,19 +202,87 @@
             { "term": "Element", "def": "Subdivision of a flight (12-15 trainees)" }
         ],
         "weeklyEvents": [
-            { "week": 1, "title": "Zero Week / Reception", "events": ["In-processing", "Medical screenings", "Haircuts and uniform issue", "Initial PT baseline"] },
-            { "week": 2, "title": "Week 1 - Foundations", "events": ["Drill and ceremonies", "Air Force history and values", "Physical conditioning begins"] },
-            { "week": 3, "title": "Week 2 - Core Skills", "events": ["Weapons handling M16", "Self-aid and buddy care", "Uniform and appearance standards"] },
-            { "week": 4, "title": "Week 3 - Combat Readiness", "events": ["M16 qualification", "Gas chamber training", "Fitness testing"] },
-            { "week": 5, "title": "Week 4 - Field Operations", "events": ["Field training exercises", "Land navigation", "Survival techniques"] },
-            { "week": 6, "title": "Week 5 - Advanced Training", "events": ["BEAST preparation", "Leadership evaluation", "PT assessment"] },
-            { "week": 7, "title": "Warrior Week (BEAST)", "events": ["Full field deployment exercise", "Combat simulations", "Team leadership roles"] },
-            { "week": 8, "title": "Graduation Week", "events": ["Return from BEAST", "Coin ceremony", "Airman's Run", "Graduation parade"] }
-        ]
+            {
+                "week": 1,
+                "title": "Zero Week / Reception",
+                "events": [
+                    { "name": "In-processing", "url": "https://www.airforce.com/training/military-training/bmt/week-1" },
+                    { "name": "Medical screenings", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" },
+                    { "name": "Haircuts and uniform issue", "url": "https://www.airforce.com/training/military-training/bmt/week-1" },
+                    { "name": "Initial PT baseline", "url": "https://www.airforce.com/training/military-training/bmt" }
+                ]
+            },
+            {
+                "week": 2,
+                "title": "Week 1 - Foundations",
+                "events": [
+                    { "name": "Drill and ceremonies", "url": "https://www.airforce.com/training/military-training/bmt/week-2" },
+                    { "name": "Air Force history and values", "url": "https://www.airforce.com/training/military-training/bmt/week-2" },
+                    { "name": "Physical conditioning begins", "url": "https://www.airforce.com/training/military-training/bmt" }
+                ]
+            },
+            {
+                "week": 3,
+                "title": "Week 2 - Core Skills",
+                "events": [
+                    { "name": "Weapons handling M16", "url": "https://www.airforce.com/training/military-training/bmt/week-3" },
+                    { "name": "Self-aid and buddy care", "url": "https://www.airforce.com/training/military-training/bmt/week-3" },
+                    { "name": "Uniform and appearance standards", "url": "https://www.airforce.com/training/military-training/bmt/week-3" }
+                ]
+            },
+              {
+                "week": 4,
+                "title": "Week 3 - Combat Readiness",
+                "events": [
+                  { "name": "M16 qualification", "url": "https://www.airforce.com/training/military-training/bmt/week-4" },
+                  { "name": "Gas chamber training", "url": "https://www.airforce.com/training/military-training/bmt/week-4" },
+                  { "name": "Fitness testing", "url": "https://www.airforce.com/training/military-training/bmt" }
+                ]
+              },
+              {
+                "week": 5,
+                "title": "Week 4 - Field Operations",
+                "events": [
+                  { "name": "Field training exercises", "url": "https://www.airforce.com/training/military-training/bmt/week-5" },
+                  { "name": "Land navigation", "url": "https://www.airforce.com/training/military-training/bmt/week-5" },
+                  { "name": "Survival techniques", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" }
+                ]
+              },
+              {
+                "week": 6,
+                "title": "Week 5 - Advanced Training",
+                "events": [
+                  { "name": "BEAST preparation", "url": "https://www.airforce.com/training/military-training/bmt/week-6" },
+                  { "name": "Leadership evaluation", "url": "https://www.airforce.com/training/military-training/bmt" },
+                  { "name": "PT assessment", "url": "https://www.airforce.com/training/military-training/bmt" }
+                ]
+              },
+              {
+                "week": 7,
+                "title": "Warrior Week (BEAST)",
+                "events": [
+                  { "name": "Full field deployment exercise", "url": "https://www.airforce.com/training/military-training/bmt/week-6" },
+                  { "name": "Combat simulations", "url": "https://www.airforce.com/training/military-training/bmt/week-6" },
+                  { "name": "Team leadership roles", "url": "https://www.airforce.com/training/military-training/bmt/week-6" }
+                ]
+              },
+              {
+                "week": 8,
+                "title": "Graduation Week",
+                "events": [
+                  { "name": "Return from BEAST", "url": "https://www.airforce.com/training/military-training/bmt/week-7" },
+                  { "name": "Coin ceremony", "url": "https://www.airforce.com/training/military-training/bmt/week-7" },
+                  { "name": "Airman's Run", "url": "https://www.airforce.com/training/military-training/bmt/week-7" },
+                  { "name": "Graduation parade", "url": "https://www.airforce.com/training/military-training/bmt/week-7" }
+                ]
+              }
+            ]
+          
     },
     {
         "id": "navy",
         "name": "Navy",
+        "icon": "⚓",
         "fullName": "United States Navy",
         "trainingName": "Recruit Training Command (RTC)",
         "colors": {
@@ -161,19 +322,87 @@
             { "term": "Liberty", "def": "Authorized time off base" }
         ],
         "weeklyEvents": [
-            { "week": 1, "title": "Processing Week", "events": ["In-processing at RTC Great Lakes", "Medical screenings", "Uniform issue", "Division assignment"] },
-            { "week": 2, "title": "Week 1 - Foundations", "events": ["Seamanship basics", "Navy customs and courtesies", "Drill practice"] },
-            { "week": 3, "title": "Week 2 - Core Navy Skills", "events": ["Damage control training", "Firefighting basics", "First aid / CPR"] },
-            { "week": 4, "title": "Week 3 - Warfare Training", "events": ["Weapons familiarization", "Chemical defense", "Swim qualification"] },
-            { "week": 5, "title": "Week 4 - Advanced Skills", "events": ["Seamanship advanced", "Navigation basics", "Division competitions"] },
-            { "week": 6, "title": "Week 5 - Tactical Operations", "events": ["Tactical training", "Team problem solving", "Battle Stations prep"] },
-            { "week": 7, "title": "Week 6 - Battle Stations", "events": ["12-hour Battle Stations event", "Transition from recruit to sailor", "Uniform change ceremony"] },
-            { "week": 8, "title": "Graduation Week", "events": ["Final inspections", "Pass in Review ceremony", "Liberty granted", "Orders to A-School"] }
-        ]
+              {
+                "week": 1,
+                "title": "Processing Week",
+                "events": [
+                  { "name": "In-processing at RTC Great Lakes", "url": "https://www.bootcamp.navy.mil/" },
+                  { "name": "Medical screenings", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" },
+                  { "name": "Uniform issue", "url": "https://www.bootcamp.navy.mil/" },
+                  { "name": "Division assignment", "url": "https://www.bootcamp.navy.mil/" }
+                ]
+              },
+              {
+                "week": 2,
+                "title": "Week 1 - Foundations",
+                "events": [
+                  { "name": "Seamanship basics", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Navy customs and courtesies", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Drill practice", "url": "https://www.bootcamp.navy.mil/Recruits/" }
+                ]
+              },
+              {
+                "week": 3,
+                "title": "Week 2 - Core Navy Skills",
+                "events": [
+                  { "name": "Damage control training", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Firefighting basics", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "First aid / CPR", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" }
+                ]
+              },
+              {
+                "week": 4,
+                "title": "Week 3 - Warfare Training",
+                "events": [
+                  { "name": "Weapons familiarization", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Chemical defense", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Swim qualification", "url": "https://www.bootcamp.navy.mil/Recruits/" }
+                ]
+              },
+              {
+                "week": 5,
+                "title": "Week 4 - Advanced Skills",
+                "events": [
+                  { "name": "Seamanship advanced", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Navigation basics", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Division competitions", "url": "https://www.bootcamp.navy.mil/" }
+                ]
+              },
+              {
+                "week": 6,
+                "title": "Week 5 - Tactical Operations",
+                "events": [
+                  { "name": "Tactical training", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Team problem solving", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Battle Stations prep", "url": "https://www.bootcamp.navy.mil/Recruits/" }
+                ]
+              },
+              {
+                "week": 7,
+                "title": "Week 6 - Battle Stations",
+                "events": [
+                  { "name": "12-hour Battle Stations event", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Transition from recruit to sailor", "url": "https://www.bootcamp.navy.mil/Recruits/" },
+                  { "name": "Uniform change ceremony", "url": "https://www.bootcamp.navy.mil/" }
+                ]
+              },
+              {
+                "week": 8,
+                "title": "Graduation Week",
+                "events": [
+                  { "name": "Final inspections", "url": "https://www.bootcamp.navy.mil/Families/" },
+                  { "name": "Pass in Review ceremony", "url": "https://www.bootcamp.navy.mil/Families/" },
+                  { "name": "Liberty granted", "url": "https://www.bootcamp.navy.mil/Families/" },
+                  { "name": "Orders to A-School", "url": "https://www.bootcamp.navy.mil/Recruits/" }
+                ]
+              }
+            ]
+          
     },
     {
         "id": "marines",
         "name": "Marines",
+        "icon": "🔴",
         "fullName": "United States Marine Corps",
         "trainingName": "Marine Corps Recruit Training",
         "colors": {
@@ -207,25 +436,135 @@
             { "term": "The Crucible", "def": "54-hour culminating event - final test before earning the title Marine" },
             { "term": "EGA Ceremony", "def": "The moment a recruit officially becomes a Marine" }
         ],
-        "weeklyEvents": [
-            { "week": 1, "title": "Receiving Week", "events": ["Arrival at MCRD", "In-processing", "Gear issue", "Initial strength test"] },
-            { "week": 2, "title": "Phase 1 Begins", "events": ["Close order drill", "Core values", "Physical conditioning", "Swim qualification"] },
-            { "week": 3, "title": "Physical Conditioning", "events": ["Obstacle courses", "Pugil stick fighting", "MCMAP martial arts intro"] },
-            { "week": 4, "title": "Team Building", "events": ["Confidence courses", "Team tactics", "First aid training"] },
-            { "week": 5, "title": "Phase 2 - Rifle Range", "events": ["Grass week dry fire", "Known distance shooting", "Rifle qualification begins"] },
-            { "week": 6, "title": "Rifle Qualification", "events": ["Official rifle qualification", "Field exercises", "Combat marksmanship"] },
-            { "week": 7, "title": "Field Skills", "events": ["Land navigation", "Patrolling techniques", "Field living"] },
-            { "week": 8, "title": "Phase 3 - Advanced Combat", "events": ["Advanced combat training", "NBC defense", "Night operations"] },
-            { "week": 9, "title": "Warrior Skills", "events": ["Combat endurance course", "Water survival", "Leadership evaluations"] },
-            { "week": 10, "title": "Crucible Preparation", "events": ["Mental and physical preparation", "Final PFT", "Gear prep"] },
-            { "week": 11, "title": "The Crucible", "events": ["54-hour culminating event begins", "Limited sleep and food", "Team challenges"] },
-            { "week": 12, "title": "Eagle Globe and Anchor", "events": ["Crucible completion", "EGA ceremony", "Family notification"] },
-            { "week": 13, "title": "Graduation Week", "events": ["Final drill evaluations", "Family Day", "Graduation ceremony", "Orders to MCT"] }
-        ]   
+    
+            "weeklyEvents": [
+              {
+                "week": 1,
+                "title": "Receiving Week",
+                "events": [
+                  { "name": "Arrival at MCRD", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "In-processing", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Gear issue", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Initial strength test", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" }
+                ]
+              },
+              {
+                "week": 2,
+                "title": "Phase 1 Begins",
+                "events": [
+                  { "name": "Close order drill", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Core values", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Physical conditioning", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Swim qualification", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" }
+                ]
+              },
+              {
+                "week": 3,
+                "title": "Physical Conditioning",
+                "events": [
+                  { "name": "Obstacle courses", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Pugil stick fighting", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "MCMAP martial arts intro", "url": "https://www.marines.com/become-a-marine/process-to-join/recruit-training.html" }
+                ]
+              },
+              {
+                "week": 4,
+                "title": "Team Building",
+                "events": [
+                  { "name": "Confidence courses", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Team tactics", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "First aid training", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" }
+                ]
+              },
+              {
+                "week": 5,
+                "title": "Phase 2 - Rifle Range",
+                "events": [
+                  { "name": "Grass week dry fire", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Known distance shooting", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Rifle qualification begins", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" }
+                ]
+              },
+              {
+                "week": 6,
+                "title": "Rifle Qualification",
+                "events": [
+                  { "name": "Official rifle qualification", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Field exercises", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Combat marksmanship", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" }
+                ]
+              },
+              {
+                "week": 7,
+                "title": "Field Skills",
+                "events": [
+                  { "name": "Land navigation", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Patrolling techniques", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Field living", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" }
+                ]
+              },
+              {
+                "week": 8,
+                "title": "Phase 3 - Advanced Combat",
+                "events": [
+                  { "name": "Advanced combat training", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "NBC defense", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" },
+                  { "name": "Night operations", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" }
+                ]
+              },
+              {
+                "week": 9,
+                "title": "Warrior Skills",
+                "events": [
+                  { "name": "Combat endurance course", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Water survival", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Leadership evaluations", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" }
+                ]
+              },
+              {
+                "week": 10,
+                "title": "Crucible Preparation",
+                "events": [
+                  { "name": "Mental and physical preparation", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/Crucible/" },
+                  { "name": "Final PFT", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Gear prep", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/Crucible/" }
+                ]
+              },
+              {
+                "week": 11,
+                "title": "The Crucible",
+                "events": [
+                  { "name": "54-hour culminating event begins", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/Crucible/" },
+                  { "name": "Limited sleep and food", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/Crucible/" },
+                  { "name": "Team challenges", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/Crucible/" }
+                ]
+              },
+              {
+                "week": 12,
+                "title": "Eagle Globe and Anchor",
+                "events": [
+                  { "name": "Crucible completion", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/Crucible/" },
+                  { "name": "EGA ceremony", "url": "https://www.marines.com/become-a-marine/process-to-join/recruit-training.html" },
+                  { "name": "Family notification", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" }
+                ]
+              },
+              {
+                "week": 13,
+                "title": "Graduation Week",
+                "events": [
+                  { "name": "Final drill evaluations", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Family Day", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" },
+                  { "name": "Graduation ceremony", "url": "https://www.mcrdpi.marines.mil/Recruit-Training/" },
+                  { "name": "Orders to MCT", "url": "https://www.marines.com/become-a-marine/process-to-join/recruit-training.html" }
+                ]
+              }
+            ]
+        
     },
     {
         "id": "coastguard",
         "name": "Coast Guard",
+        "icon": "🟡",
         "fullName": "United States Coast Guard",
         "trainingName": "Recruit Training (Cape May, NJ)",
         "colors": {
@@ -274,15 +613,88 @@
             { "term": "Liberty", "def": "Authorized time off base" },
             { "term": "Semper Paratus", "def": "Coast Guard motto meaning Always Ready" }
         ],
-        "weeklyEvents": [
-            { "week": 1, "title": "Arrival Week", "events": ["Arrival at TRACEN Cape May", "In-processing and screenings", "Uniform and gear issue", "Company assignment", "Initial strength test"] },
-            { "week": 2, "title": "Week 1 - Foundations", "events": ["Coast Guard core values instruction", "Close order drill begins", "Physical training program starts", "Seamanship basics introduction"] },
-            { "week": 3, "title": "Week 2 - Core Skills", "events": ["First aid and CPR training", "Firefighting fundamentals", "Damage control basics", "Swimming qualification begins"] },
-            { "week": 4, "title": "Week 3 - Maritime Training", "events": ["Advanced seamanship", "Navigation fundamentals", "Search and rescue overview", "Weapons familiarization"] },
-            { "week": 5, "title": "Week 4 - Law Enforcement", "events": ["Maritime law enforcement training", "Use of force instruction", "Boarding team procedures", "Physical fitness advancement"] },
-            { "week": 6, "title": "Week 5 - Tactical Operations", "events": ["Tactical training evolutions", "Team leadership challenges", "Advanced firefighting", "PRT practice"] },
-            { "week": 7, "title": "Week 6 - Final Training", "events": ["Culminating training exercises", "Final PRT evaluation", "Inspection preparations", "Family notification window"] },
-            { "week": 8, "title": "Graduation Week", "events": ["Final inspections", "Pass in Review ceremony", "Liberty granted", "Orders to A-School issued"] }
-        ]
+            "weeklyEvents": [
+              {
+                "week": 1,
+                "title": "Arrival Week",
+                "events": [
+                  { "name": "Arrival at TRACEN Cape May", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "In-processing and screenings", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Uniform and gear issue", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Company assignment", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Initial strength test", "url": "https://www.gocoastguard.com/get-started/basic-training" }
+                ]
+              },
+              {
+                "week": 2,
+                "title": "Week 1 - Foundations",
+                "events": [
+                  { "name": "Coast Guard core values instruction", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Close order drill begins", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Physical training program starts", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Seamanship basics introduction", "url": "https://www.gocoastguard.com/get-started/basic-training" }
+                ]
+              },
+              {
+                "week": 3,
+                "title": "Week 2 - Core Skills",
+                "events": [
+                  { "name": "First aid and CPR training", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" },
+                  { "name": "Firefighting fundamentals", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Damage control basics", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Swimming qualification begins", "url": "https://www.gocoastguard.com/get-started/basic-training" }
+                ]
+              },
+              {
+                "week": 4,
+                "title": "Week 3 - Maritime Training",
+                "events": [
+                  { "name": "Advanced seamanship", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Navigation fundamentals", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Search and rescue overview", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Weapons familiarization", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" }
+                ]
+              },
+              {
+                "week": 5,
+                "title": "Week 4 - Law Enforcement",
+                "events": [
+                  { "name": "Maritime law enforcement training", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Use of force instruction", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Boarding team procedures", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Physical fitness advancement", "url": "https://www.gocoastguard.com/get-started/basic-training" }
+                ]
+              },
+              {
+                "week": 6,
+                "title": "Week 5 - Tactical Operations",
+                "events": [
+                  { "name": "Tactical training evolutions", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Team leadership challenges", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Advanced firefighting", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "PRT practice", "url": "https://www.gocoastguard.com/get-started/basic-training" }
+                ]
+              },
+              {
+                "week": 7,
+                "title": "Week 6 - Final Training",
+                "events": [
+                  { "name": "Culminating training exercises", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Final PRT evaluation", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Inspection preparations", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Family notification window", "url": "https://www.militaryonesource.mil/resources/millife-guides/basic-training/" }
+                ]
+              },
+              {
+                "week": 8,
+                "title": "Graduation Week",
+                "events": [
+                  { "name": "Final inspections", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Pass in Review ceremony", "url": "https://www.forcecom.uscg.mil/Our-Organization/FORCECOM-UNITS/TraCen-Cape-May/Training/RecruitTraining/" },
+                  { "name": "Liberty granted", "url": "https://www.gocoastguard.com/get-started/basic-training" },
+                  { "name": "Orders to A-School issued", "url": "https://www.gocoastguard.com/get-started/basic-training" }
+                ]
+              }
+            ]
     }
 ]

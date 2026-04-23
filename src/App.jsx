@@ -1,274 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 
 import "./style.scss";
-import BranchButton from "./Components/Card";
+import BranchButton from "./Components/BranchButton";
 
-// --- BRANCH DATA --------------------------------------------------------------
-const BRANCHES = {
-  army: {
-    name: "Army",
-    fullName: "United States Army",
-    icon: "🟢",
-    trainingName: "Basic Combat Training (BCT)",
-    color: "#4a7c59", accent: "#c8a84b", dark: "#1a2e1f",
-    motto: "This We'll Defend", duration: 10,
-    ranks: [
-      { abbr: "PVT", name: "Private", grade: "E-1" },
-      { abbr: "PV2", name: "Private Second Class", grade: "E-2" },
-      { abbr: "PFC", name: "Private First Class", grade: "E-3" },
-      { abbr: "SPC", name: "Specialist", grade: "E-4" },
-      { abbr: "CPL", name: "Corporal", grade: "E-4" },
-      { abbr: "SGT", name: "Sergeant", grade: "E-5" },
-      { abbr: "SSG", name: "Staff Sergeant", grade: "E-6" },
-      { abbr: "SFC", name: "Sergeant First Class", grade: "E-7" },
-      { abbr: "MSG", name: "Master Sergeant", grade: "E-8" },
-      { abbr: "1SG", name: "First Sergeant", grade: "E-8" },
-      { abbr: "SGM", name: "Sergeant Major", grade: "E-9" },
-    ],
-    acronyms: [
-      { abbr: "BCT", meaning: "Basic Combat Training" },
-      { abbr: "DS", meaning: "Drill Sergeant" },
-      { abbr: "PT", meaning: "Physical Training" },
-      { abbr: "ACFT", meaning: "Army Combat Fitness Test" },
-      { abbr: "AIT", meaning: "Advanced Individual Training" },
-      { abbr: "MRE", meaning: "Meal Ready to Eat" },
-      { abbr: "OCP", meaning: "Operational Camouflage Pattern" },
-      { abbr: "FOB", meaning: "Forward Operating Base" },
-      { abbr: "CO", meaning: "Commanding Officer" },
-      { abbr: "CQ", meaning: "Charge of Quarters" },
-      { abbr: "AWOL", meaning: "Absent Without Leave" },
-      { abbr: "PX", meaning: "Post Exchange (store on base)" },
-      { abbr: "KP", meaning: "Kitchen Police (kitchen duty)" },
-      { abbr: "SOP", meaning: "Standard Operating Procedure" },
-    ],
-    keyTerms: [
-      { term: "Battle Buddy", def: "A soldier always paired with another for safety and support" },
-      { term: "Drill Sergeant", def: "NCO responsible for training recruits" },
-      { term: "Formation", def: "Organized arrangement of soldiers for inspection or movement" },
-      { term: "Barracks", def: "Living quarters for enlisted soldiers" },
-      { term: "Reveille", def: "Morning bugle call to wake soldiers" },
-      { term: "Taps", def: "Bugle call played at end of day / lights out" },
-      { term: "HOOAH", def: "Army expression of acknowledgment, enthusiasm, or affirmation" },
-      { term: "Blue Phase", def: "Weeks 1-3: Reception and adjustment" },
-      { term: "Red Phase", def: "Weeks 4-5: Core combat skills" },
-      { term: "White Phase", def: "Weeks 6-7: Weapons and field training" },
-      { term: "Black Phase", def: "Weeks 8-10: Advanced tactics and graduation prep" },
-    ],
-    weeklyEvents: [
-      { week: 1, title: "Reception Week", events: ["In-processing", "Medical screenings", "Haircuts", "Uniform issue", "Initial PT assessment"] },
-      { week: 2, title: "Blue Phase Begins", events: ["Drill and ceremony", "First aid training", "Core values instruction", "Physical fitness routines begin"] },
-      { week: 3, title: "Physical Conditioning", events: ["Advanced PT", "Obstacle courses", "Land navigation intro", "Team-building exercises"] },
-      { week: 4, title: "Red Phase - Combat Skills", events: ["Rifle marksmanship begins", "Pugil stick training", "Combatives (hand-to-hand)", "NBC Chemical training"] },
-      { week: 5, title: "Weapons Qualification", events: ["M16/M4 qualification", "Grenade training", "Field exercises", "Night operations intro"] },
-      { week: 6, title: "White Phase - Field Training", events: ["Extended field exercises", "Tactical movement", "Patrol techniques", "Survival skills"] },
-      { week: 7, title: "Advanced Field Operations", events: ["Live-fire exercises", "ACFT practice", "Leadership challenges", "Buddy team exercises"] },
-      { week: 8, title: "Black Phase Begins", events: ["Advanced tactical ops", "ACFT official test", "Final weapons qual", "Senior leadership mentoring"] },
-      { week: 9, title: "Victory Forge Prep", events: ["Final field training exercise", "Culminating event prep", "Letter writing final", "Family contact window"] },
-      { week: 10, title: "Graduation Week", events: ["Victory Forge completion", "Transition to AIT briefings", "Graduation ceremony", "Family Day activities"] },
-    ],
-  },
-  airforce: {
-    name: "Air Force", fullName: "United States Air Force",
-    icon: "🔵",
-    trainingName: "Basic Military Training (BMT)",
-    color: "#1a3a5c", accent: "#4a90d9", dark: "#0d1f33",
-    motto: "Aim High... Fly-Fight-Win", duration: 8,
-    ranks: [
-      { abbr: "AB", name: "Airman Basic", grade: "E-1" },
-      { abbr: "Amn", name: "Airman", grade: "E-2" },
-      { abbr: "A1C", name: "Airman First Class", grade: "E-3" },
-      { abbr: "SrA", name: "Senior Airman", grade: "E-4" },
-      { abbr: "SSgt", name: "Staff Sergeant", grade: "E-5" },
-      { abbr: "TSgt", name: "Technical Sergeant", grade: "E-6" },
-      { abbr: "MSgt", name: "Master Sergeant", grade: "E-7" },
-      { abbr: "SMSgt", name: "Senior Master Sergeant", grade: "E-8" },
-      { abbr: "CMSgt", name: "Chief Master Sergeant", grade: "E-9" },
-    ],
-    acronyms: [
-      { abbr: "BMT", meaning: "Basic Military Training" },
-      { abbr: "MTI", meaning: "Military Training Instructor" },
-      { abbr: "PT", meaning: "Physical Training" },
-      { abbr: "AFSC", meaning: "Air Force Specialty Code (job)" },
-      { abbr: "TDY", meaning: "Temporary Duty Assignment" },
-      { abbr: "AETC", meaning: "Air Education and Training Command" },
-      { abbr: "OCP", meaning: "Operational Camouflage Pattern" },
-      { abbr: "PRT", meaning: "Physical Readiness Test" },
-    ],
-    keyTerms: [
-      { term: "MTI", def: "Military Training Instructor - the Air Force equivalent of Drill Sergeant" },
-      { term: "Flight", def: "Basic unit of Air Force organization (like a platoon)" },
-      { term: "Dorm", def: "Trainee living quarters at Lackland AFB" },
-      { term: "Warrior Week", def: "Culminating field training event in week 7" },
-      { term: "BEAST", def: "Basic Expeditionary Airman Skills Training" },
-      { term: "Coin", def: "Challenge coin awarded for achievement" },
-      { term: "Element", def: "Subdivision of a flight (12-15 trainees)" },
-    ],
-    weeklyEvents: [
-      { week: 1, title: "Zero Week / Reception", events: ["In-processing", "Medical screenings", "Haircuts and uniform issue", "Initial PT baseline"] },
-      { week: 2, title: "Week 1 - Foundations", events: ["Drill and ceremonies", "Air Force history and values", "Physical conditioning begins"] },
-      { week: 3, title: "Week 2 - Core Skills", events: ["Weapons handling M16", "Self-aid and buddy care", "Uniform and appearance standards"] },
-      { week: 4, title: "Week 3 - Combat Readiness", events: ["M16 qualification", "Gas chamber training", "Fitness testing"] },
-      { week: 5, title: "Week 4 - Field Operations", events: ["Field training exercises", "Land navigation", "Survival techniques"] },
-      { week: 6, title: "Week 5 - Advanced Training", events: ["BEAST preparation", "Leadership evaluation", "PT assessment"] },
-      { week: 7, title: "Warrior Week (BEAST)", events: ["Full field deployment exercise", "Combat simulations", "Team leadership roles"] },
-      { week: 8, title: "Graduation Week", events: ["Return from BEAST", "Coin ceremony", "Airman's Run", "Graduation parade"] },
-    ],
-  },
-  navy: {
-    name: "Navy", fullName: "United States Navy",
-    icon: "⚓",
-    trainingName: "Recruit Training Command (RTC)",
-    color: "#1b2a4a", accent: "#c8960c", dark: "#0e1829",
-    motto: "Forged by the Sea", duration: 8,
-    ranks: [
-      { abbr: "SR", name: "Seaman Recruit", grade: "E-1" },
-      { abbr: "SA", name: "Seaman Apprentice", grade: "E-2" },
-      { abbr: "SN", name: "Seaman", grade: "E-3" },
-      { abbr: "PO3", name: "Petty Officer Third Class", grade: "E-4" },
-      { abbr: "PO2", name: "Petty Officer Second Class", grade: "E-5" },
-      { abbr: "PO1", name: "Petty Officer First Class", grade: "E-6" },
-      { abbr: "CPO", name: "Chief Petty Officer", grade: "E-7" },
-      { abbr: "SCPO", name: "Senior Chief Petty Officer", grade: "E-8" },
-      { abbr: "MCPO", name: "Master Chief Petty Officer", grade: "E-9" },
-    ],
-    acronyms: [
-      { abbr: "RTC", meaning: "Recruit Training Command (Great Lakes, IL)" },
-      { abbr: "RDC", meaning: "Recruit Division Commander" },
-      { abbr: "PRT", meaning: "Physical Readiness Test" },
-      { abbr: "NWU", meaning: "Navy Working Uniform" },
-      { abbr: "USS", meaning: "United States Ship" },
-      { abbr: "XO", meaning: "Executive Officer (second in command)" },
-      { abbr: "NAS", meaning: "Naval Air Station" },
-    ],
-    keyTerms: [
-      { term: "Division", def: "Group of recruits trained together" },
-      { term: "RDC", def: "Recruit Division Commander - Navy's Drill Instructor" },
-      { term: "Rack", def: "Bunk bed / sleeping area" },
-      { term: "Galley", def: "Kitchen / cafeteria on a ship or base" },
-      { term: "Battle Stations", def: "Final culminating 12-hour training evolution" },
-      { term: "Pass in Review", def: "Navy graduation parade ceremony" },
-      { term: "Liberty", def: "Authorized time off base" },
-    ],
-    weeklyEvents: [
-      { week: 1, title: "Processing Week", events: ["In-processing at RTC Great Lakes", "Medical screenings", "Uniform issue", "Division assignment"] },
-      { week: 2, title: "Week 1 - Foundations", events: ["Seamanship basics", "Navy customs and courtesies", "Drill practice"] },
-      { week: 3, title: "Week 2 - Core Navy Skills", events: ["Damage control training", "Firefighting basics", "First aid / CPR"] },
-      { week: 4, title: "Week 3 - Warfare Training", events: ["Weapons familiarization", "Chemical defense", "Swim qualification"] },
-      { week: 5, title: "Week 4 - Advanced Skills", events: ["Seamanship advanced", "Navigation basics", "Division competitions"] },
-      { week: 6, title: "Week 5 - Tactical Operations", events: ["Tactical training", "Team problem solving", "Battle Stations prep"] },
-      { week: 7, title: "Week 6 - Battle Stations", events: ["12-hour Battle Stations event", "Transition from recruit to sailor", "Uniform change ceremony"] },
-      { week: 8, title: "Graduation Week", events: ["Final inspections", "Pass in Review ceremony", "Liberty granted", "Orders to A-School"] },
-    ],
-  },
-  marines: {
-    name: "Marines", fullName: "United States Marine Corps",
-    icon: "🔴",
-    trainingName: "Marine Corps Recruit Training",
-    color: "#8b0000", accent: "#c8a84b", dark: "#3d0000",
-    motto: "Semper Fidelis - Always Faithful", duration: 13,
-    ranks: [
-      { abbr: "Pvt", name: "Private", grade: "E-1" },
-      { abbr: "PFC", name: "Private First Class", grade: "E-2" },
-      { abbr: "LCpl", name: "Lance Corporal", grade: "E-3" },
-      { abbr: "Cpl", name: "Corporal", grade: "E-4" },
-      { abbr: "Sgt", name: "Sergeant", grade: "E-5" },
-      { abbr: "SSgt", name: "Staff Sergeant", grade: "E-6" },
-      { abbr: "GySgt", name: "Gunnery Sergeant", grade: "E-7" },
-      { abbr: "MSgt", name: "Master Sergeant", grade: "E-8" },
-      { abbr: "1stSgt", name: "First Sergeant", grade: "E-8" },
-      { abbr: "MGySgt", name: "Master Gunnery Sergeant", grade: "E-9" },
-    ],
-    acronyms: [
-      { abbr: "MCRD", meaning: "Marine Corps Recruit Depot" },
-      { abbr: "DI", meaning: "Drill Instructor" },
-      { abbr: "PFT", meaning: "Physical Fitness Test" },
-      { abbr: "CFT", meaning: "Combat Fitness Test" },
-      { abbr: "MOS", meaning: "Military Occupational Specialty (job code)" },
-      { abbr: "EGA", meaning: "Eagle, Globe and Anchor (Marine Corps emblem)" },
-      { abbr: "MCT", meaning: "Marine Combat Training (after boot camp)" },
-    ],
-    keyTerms: [
-      { term: "Drill Instructor", def: "Marine NCO responsible for transforming recruits into Marines" },
-      { term: "Platoon", def: "Recruit training unit of 40-90 recruits" },
-      { term: "Rack", def: "Bunk / sleeping area" },
-      { term: "Hatch", def: "Door (Marine Corps term)" },
-      { term: "Deck", def: "Floor (Marine Corps term)" },
-      { term: "The Crucible", def: "54-hour culminating event - final test before earning the title Marine" },
-      { term: "EGA Ceremony", def: "The moment a recruit officially becomes a Marine" },
-    ],
-    weeklyEvents: [
-      { week: 1, title: "Receiving Week", events: ["Arrival at MCRD", "In-processing", "Gear issue", "Initial strength test"] },
-      { week: 2, title: "Phase 1 Begins", events: ["Close order drill", "Core values", "Physical conditioning", "Swim qualification"] },
-      { week: 3, title: "Physical Conditioning", events: ["Obstacle courses", "Pugil stick fighting", "MCMAP martial arts intro"] },
-      { week: 4, title: "Team Building", events: ["Confidence courses", "Team tactics", "First aid training"] },
-      { week: 5, title: "Phase 2 - Rifle Range", events: ["Grass week dry fire", "Known distance shooting", "Rifle qualification begins"] },
-      { week: 6, title: "Rifle Qualification", events: ["Official rifle qualification", "Field exercises", "Combat marksmanship"] },
-      { week: 7, title: "Field Skills", events: ["Land navigation", "Patrolling techniques", "Field living"] },
-      { week: 8, title: "Phase 3 - Advanced Combat", events: ["Advanced combat training", "NBC defense", "Night operations"] },
-      { week: 9, title: "Warrior Skills", events: ["Combat endurance course", "Water survival", "Leadership evaluations"] },
-      { week: 10, title: "Crucible Preparation", events: ["Mental and physical preparation", "Final PFT", "Gear prep"] },
-      { week: 11, title: "The Crucible", events: ["54-hour culminating event begins", "Limited sleep and food", "Team challenges"] },
-      { week: 12, title: "Eagle Globe and Anchor", events: ["Crucible completion", "EGA ceremony", "Family notification"] },
-      { week: 13, title: "Graduation Week", events: ["Final drill evaluations", "Family Day", "Graduation ceremony", "Orders to MCT"] },
-    ],
-  },
-  coastguard: {
-    name: "Coast Guard", fullName: "United States Coast Guard",
-    icon: "🟡",
-    trainingName: "Recruit Training (Cape May, NJ)",
-    color: "#1a3a5c", accent: "#e87722", dark: "#0d1f33",
-    motto: "Semper Paratus - Always Ready", duration: 8,
-    ranks: [
-      { abbr: "SR", name: "Seaman Recruit", grade: "E-1" },
-      { abbr: "SA", name: "Seaman Apprentice", grade: "E-2" },
-      { abbr: "SN", name: "Seaman", grade: "E-3" },
-      { abbr: "PO3", name: "Petty Officer Third Class", grade: "E-4" },
-      { abbr: "PO2", name: "Petty Officer Second Class", grade: "E-5" },
-      { abbr: "PO1", name: "Petty Officer First Class", grade: "E-6" },
-      { abbr: "CPO", name: "Chief Petty Officer", grade: "E-7" },
-      { abbr: "SCPO", name: "Senior Chief Petty Officer", grade: "E-8" },
-      { abbr: "MCPO", name: "Master Chief Petty Officer", grade: "E-9" },
-    ],
-    acronyms: [
-      { abbr: "TRACEN", meaning: "Training Center Cape May (boot camp location)" },
-      { abbr: "CC", meaning: "Company Commander (like a Drill Instructor)" },
-      { abbr: "PT", meaning: "Physical Training" },
-      { abbr: "PRT", meaning: "Physical Readiness Test" },
-      { abbr: "USCG", meaning: "United States Coast Guard" },
-      { abbr: "SAR", meaning: "Search and Rescue" },
-      { abbr: "MLE", meaning: "Maritime Law Enforcement" },
-      { abbr: "NWU", meaning: "Navy Working Uniform (worn by Coast Guard)" },
-      { abbr: "XO", meaning: "Executive Officer (second in command)" },
-      { abbr: "CO", meaning: "Commanding Officer" },
-      { abbr: "A-School", meaning: "Coast Guard technical training after boot camp" },
-      { abbr: "TDY", meaning: "Temporary Duty Assignment" },
-    ],
-    keyTerms: [
-      { term: "Company Commander", def: "Coast Guard NCO responsible for training recruits - equivalent to Drill Instructor" },
-      { term: "Company", def: "Group of recruits trained together at Cape May" },
-      { term: "Cape May", def: "Cape May, New Jersey - the only Coast Guard recruit training location" },
-      { term: "Swab", def: "Nickname for a Coast Guard recruit during boot camp" },
-      { term: "Rack", def: "Bunk / sleeping area" },
-      { term: "Galley", def: "Kitchen / cafeteria" },
-      { term: "Heave To", def: "Coast Guard command to stop" },
-      { term: "Seamanship", def: "The art and skill of operating a vessel safely" },
-      { term: "SAR", def: "Search and Rescue - a primary Coast Guard mission" },
-      { term: "Pass in Review", def: "Coast Guard graduation parade ceremony" },
-      { term: "Liberty", def: "Authorized time off base" },
-      { term: "Semper Paratus", def: "Coast Guard motto meaning Always Ready" },
-    ],
-    weeklyEvents: [
-      { week: 1, title: "Arrival Week", events: ["Arrival at TRACEN Cape May", "In-processing and screenings", "Uniform and gear issue", "Company assignment", "Initial strength test"] },
-      { week: 2, title: "Week 1 - Foundations", events: ["Coast Guard core values instruction", "Close order drill begins", "Physical training program starts", "Seamanship basics introduction"] },
-      { week: 3, title: "Week 2 - Core Skills", events: ["First aid and CPR training", "Firefighting fundamentals", "Damage control basics", "Swimming qualification begins"] },
-      { week: 4, title: "Week 3 - Maritime Training", events: ["Advanced seamanship", "Navigation fundamentals", "Search and rescue overview", "Weapons familiarization"] },
-      { week: 5, title: "Week 4 - Law Enforcement", events: ["Maritime law enforcement training", "Use of force instruction", "Boarding team procedures", "Physical fitness advancement"] },
-      { week: 6, title: "Week 5 - Tactical Operations", events: ["Tactical training evolutions", "Team leadership challenges", "Advanced firefighting", "PRT practice"] },
-      { week: 7, title: "Week 6 - Final Training", events: ["Culminating training exercises", "Final PRT evaluation", "Inspection preparations", "Family notification window"] },
-      { week: 8, title: "Graduation Week", events: ["Final inspections", "Pass in Review ceremony", "Liberty granted", "Orders to A-School issued"] },
-    ],
-  },
-};
+import branches from "./Data/branches.json";
 
 const LETTER_TEMPLATES = [
   { id: "week1", title: "First Week Check-In", category: "Early Training",
@@ -398,7 +133,7 @@ function NotificationPanel({ branch, profile, onClose }) {
   const cs = { background:"rgba(255,255,255,0.05)", borderRadius:"12px", padding:"1rem", marginBottom:"0.65rem", border:"1px solid rgba(255,255,255,0.08)" };
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.72)",zIndex:900,display:"flex",alignItems:"flex-end",justifyContent:"center"}} onClick={e => e.target===e.currentTarget && onClose()}>
-      <div style={{background:branch.dark,borderRadius:"20px 20px 0 0",padding:"1.5rem 1.25rem",width:"100%",maxWidth:"580px",maxHeight:"85vh",overflowY:"auto",border:`1px solid ${acc}25`,borderBottom:"none",fontFamily:"Georgia,serif"}}>
+      <div style={{background:branch.colors.dark,borderRadius:"20px 20px 0 0",padding:"1.5rem 1.25rem",width:"100%",maxWidth:"580px",maxHeight:"85vh",overflowY:"auto",border:`1px solid ${acc}25`,borderBottom:"none",fontFamily:"Georgia,serif"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1.25rem"}}>
           <h2 style={{color:acc,fontSize:"1.1rem",margin:0}}>Notification Settings</h2>
           <button onClick={onClose} style={{background:"transparent",border:"none",color:"#6a7d90",fontSize:"1.6rem",cursor:"pointer",lineHeight:1}}>x</button>
@@ -478,7 +213,7 @@ function PaywallScreen({ branch, onUnlock }) {
   const selectedPlan = PLANS.find(p => p.id === plan);
 
   return (
-    <div style={{minHeight:"100vh",background:branch.dark,fontFamily:"Georgia,serif",padding:"1.5rem",display:"flex",flexDirection:"column",alignItems:"center",overflowY:"auto"}}>
+    <div style={{minHeight:"100vh",background:branch.colors.dark,fontFamily:"Georgia,serif",padding:"1.5rem",display:"flex",flexDirection:"column",alignItems:"center",overflowY:"auto"}}>
       <style>{`@keyframes pulse2{0%,100%{box-shadow:0 0 0 0 ${acc}44}50%{box-shadow:0 0 0 12px ${acc}00}}`}</style>
       <div style={{maxWidth:"460px",width:"100%"}}>
         <div style={{textAlign:"center",marginBottom:"1.75rem"}}>
@@ -619,7 +354,6 @@ function LetterTemplates({ branch, profile }) {
 
 // -- Branch Selector -----------------------------------------------------------
 function BranchSelector({ onSelect }) {
-  const [hov, setHov] = useState(null);
   return (
     <div style={{minHeight:"100vh",background:"#0a0f1a",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"2rem",fontFamily:"Georgia,serif"}}>
       <div style={{textAlign:"center",marginBottom:"2.5rem"}}>
@@ -630,14 +364,8 @@ function BranchSelector({ onSelect }) {
       </div>
       <p style={{color:"#6a7d90",marginBottom:"1.25rem",fontSize:"0.9rem",textAlign:"center"}}>Select your loved one's branch to begin</p>
       <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"1rem",maxWidth:"520px",width:"100%"}}>
-        {Object.entries(BRANCHES).map(([k,b]) => (
-          <BranchButton key={k} k={k} b={b} hov={hov} setHov={setHov} onSelect={onSelect}/>
-          // <button key={k} onMouseEnter={() => setHov(k)} onMouseLeave={() => setHov(null)} onClick={() => onSelect(k)} className="card"
-          //   style={{background:hov===k?b.color:"rgba(255,255,255,0.05)",border:`2px solid ${hov===k?b.accent:"rgba(255,255,255,0.1)"}`,borderRadius:"14px",padding:"1.4rem 1rem",cursor:"pointer",transition:"all 0.25s",textAlign:"center",color:"#fff",fontFamily:"Georgia,serif"}}>
-          //   <div style={{fontSize:"1.9rem",marginBottom:"0.45rem"}}>{k==="army"?"🟢":k==="airforce"?"🔵":k==="navy"?"⚓":k==="coastguard"?"🔴":""}</div>
-          //   <div style={{fontSize:"1rem",fontWeight:"700",letterSpacing:"0.04em"}}>{b.name}</div>
-          //   <div style={{fontSize:"0.7rem",color:hov===k?"rgba(255,255,255,0.75)":"#6a7d90",marginTop:"0.25rem",lineHeight:"1.3"}}>{b.trainingName}</div>
-          // </button>
+        {branches.map(( branch, index ) => (
+          <BranchButton key={index} branchIndex={index} branch={branch} onSelect={onSelect}/>
         ))}
       </div>
     </div>
@@ -650,19 +378,19 @@ function SetupScreen({ branch, onComplete }) {
   const [err, setErr] = useState("");
   const s = (k,v) => setForm(f => ({...f,[k]:v}));
   const inp = {width:"100%",padding:"0.82rem 1rem",borderRadius:"8px",border:`1px solid ${branch.color}40`,background:"rgba(255,255,255,0.08)",color:"#fff",fontSize:"0.95rem",outline:"none",boxSizing:"border-box",fontFamily:"Georgia,serif"};
-  const lbl = {color:branch.accent,fontSize:"0.75rem",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"0.35rem",display:"block"};
+  const lbl = {color:branch.colors.accent,fontSize:"0.75rem",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"0.35rem",display:"block"};
   const submit = () => {
     if (!form.recruiterName||!form.familyName||!form.startDate||!form.endDate) { setErr("Please fill in all fields."); return; }
     if (new Date(form.endDate)<=new Date(form.startDate)) { setErr("End date must be after start date."); return; }
     onComplete(form);
   };
   return (
-    <div style={{minHeight:"100vh",background:branch.dark,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"2rem",fontFamily:"Georgia,serif"}}>
+    <div style={{minHeight:"100vh",background:branch.colors.dark,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"2rem",fontFamily:"Georgia,serif"}}>
       <div style={{maxWidth:"440px",width:"100%"}}>
         <div style={{textAlign:"center",marginBottom:"1.75rem"}}>
           <h2 style={{color:"#fff",fontSize:"1.7rem",margin:0}}>{branch.fullName}</h2>
-          <p style={{color:branch.accent,fontStyle:"italic",margin:"0.4rem 0"}}>{branch.motto}</p>
-          <div style={{width:"45px",height:"2px",background:branch.accent,margin:"0.85rem auto"}}/>
+          <p style={{color:branch.colors.accent,fontStyle:"italic",margin:"0.4rem 0"}}>{branch.motto}</p>
+          <div style={{width:"45px",height:"2px",background:branch.colors.accent,margin:"0.85rem auto"}}/>
           <p style={{color:"#8a9bb0",margin:0,fontSize:"0.9rem"}}>Let's personalize your companion</p>
         </div>
         <div style={{display:"flex",flexDirection:"column",gap:"1rem"}}>
@@ -671,7 +399,7 @@ function SetupScreen({ branch, onComplete }) {
           <div><label style={lbl}>Training Start Date</label><input type="date" style={inp} value={form.startDate} onChange={e => s("startDate",e.target.value)}/></div>
           <div><label style={lbl}>Anticipated Graduation Date</label><input type="date" style={inp} value={form.endDate} onChange={e => s("endDate",e.target.value)}/></div>
           {err && <p style={{color:"#ff6b6b",fontSize:"0.88rem",textAlign:"center",margin:0}}>{err}</p>}
-          <button onClick={submit} style={{padding:"0.95rem",borderRadius:"10px",background:branch.color,border:`2px solid ${branch.accent}`,color:"#fff",fontSize:"1rem",fontWeight:"700",cursor:"pointer",fontFamily:"Georgia,serif",marginTop:"0.25rem"}}>Continue to App</button>
+          <button onClick={submit} style={{padding:"0.95rem",borderRadius:"10px",background:branch.colors.color,border:`2px solid ${branch.accent}`,color:"#fff",fontSize:"1rem",fontWeight:"700",cursor:"pointer",fontFamily:"Georgia,serif",marginTop:"0.25rem"}}>Continue to App</button>
           <button onClick={() => onComplete(null)} style={{background:"transparent",border:"none",color:"#6a7d90",cursor:"pointer",fontSize:"0.88rem",fontFamily:"Georgia,serif"}}>Choose different branch</button>
         </div>
       </div>
@@ -769,7 +497,7 @@ function Dashboard({ branchKey, branch, profile, onReset }) {
   const filtTrm = branch.keyTerms.filter(t => t.term.toLowerCase().includes(search.toLowerCase())||t.def.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div style={{minHeight:"100vh",background:branch.dark,fontFamily:"Georgia,serif",color:"#fff",paddingBottom:"5rem"}}>
+    <div style={{minHeight:"100vh",background:branch.colors.dark,fontFamily:"Georgia,serif",color:"#fff",paddingBottom:"5rem"}}>
       {showCeleb && !celebDone && (
         <GraduationCelebration profile={profile} branch={branch} onDismiss={() => {setShowCeleb(false); setCelebDone(true);}}/>
       )}
@@ -1062,7 +790,7 @@ export default function App() {
     </div>
   );
   if (stage==="branch") return <BranchSelector onSelect={selectBranch}/>;
-  if (stage==="setup") return <SetupScreen branch={BRANCHES[bKey]} onComplete={completeSetup}/>;
-  if (stage==="paywall") return <PaywallScreen branch={BRANCHES[bKey]} onUnlock={unlock}/>;
-  return <Dashboard branchKey={bKey} branch={BRANCHES[bKey]} profile={profile} onReset={reset}/>;
+  if (stage==="setup") return <SetupScreen branch={branches[bKey]} onComplete={completeSetup}/>;
+  if (stage==="paywall") return <PaywallScreen branch={branches[bKey]} onUnlock={unlock}/>;
+  return <Dashboard branchKey={bKey} branch={branches[bKey]} profile={profile} onReset={reset}/>;
 }

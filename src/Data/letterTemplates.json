@@ -1,0 +1,32 @@
+[
+    {
+        "id": "week1",
+        "title": "First Week Check-In",
+        "category": "Early Training",
+        "body": "Dear [Recruit Name],\n\nWe're thinking of you every single moment. By now you've arrived, been processed, and are starting to find your footing. We know it's overwhelming right now - the noise, the pace, the new faces - but you were built for this.\n\nAt home, everything feels a little quieter without you here. We keep the routines going just like you'd want.\n\nWe are so incredibly proud of you. You took a step that most people only talk about. That takes real courage.\n\nWrite back when you can. We check the mailbox every single day.\n\nAll our love,\n[Your Name]"
+    },  
+    {
+        "id": "encouragement",
+        "title": "You've Got This",
+        "category": "Encouragement",
+        "body": "Dear [Recruit Name],\n\nThere may be moments where you wonder if you can do this. You can. You absolutely can.\n\nThink about every hard thing you've overcome before. You faced those moments and came out stronger. This is no different - it's just bigger. Every hard day in training is building the person we already know you are.\n\nWe don't talk about how hard the waiting is here at home - because our job is to keep things light for you. But know that every night we think of you, and every morning we start the day with you in our hearts.\n\nKeep going. We'll be there cheering at graduation.\n\nWith so much love,\n[Your Name]"
+    },
+    {
+        "id": "news",
+        "title": "News from Home",
+        "category": "Stay Connected",
+        "body": "Dear [Recruit Name],\n\nLife at home keeps moving, but it's not quite the same without you here.\n\nThis week a lot has happened that I know you'd want to hear about. [Share a news update - a family event, something funny, a neighbor's news, a pet story.]\n\nEveryone asks about you. They all send their love and want you to know they're proud.\n\nThe weather has been [describe the weather] - we keep thinking of you and wondering what it's like where you are.\n\nWe're keeping your room just as you left it. Everything is waiting for you.\n\nCounting the days,\n[Your Name]"
+    },
+    {
+        "id": "midpoint",
+        "title": "Halfway There",
+        "category": "Milestone",
+        "body": "Dear [Recruit Name],\n\nCan you believe it? You're past the halfway point. The finish line is real now - we can almost see it from here.\n\nLook how far you've come since that first week. Every early morning, every hard run, every moment of doubt you pushed through - that was you. That was your strength.\n\nWe've been tracking every week on our calendar here at home. We cross off each day together, getting closer to the moment we see your face again.\n\nThe graduation date is circled. We already have our plans. We cannot wait to see you walk across that field.\n\nAlmost there,\n[Your Name]"
+    },
+    {
+        "id": "graduation",
+        "title": "We'll Be There",
+        "category": "Graduation",
+        "body": "Dear [Recruit Name],\n\nGraduation is close. We have our plans made, our bags ready, and our hearts full.\n\nI've been thinking about the moment I'll see your face - standing in formation, in uniform, having done something extraordinary. I don't know if I'll be able to hold it together. I probably won't.\n\nYou set out to do something hard and you did it. You became something. And you did it while we loved you from a distance, which is the hardest kind of loving there is.\n\nCome home proud. Come home rested when you can. And know that everything waiting for you here is better because of you.\n\nWe'll be there, cheering you on.\n\nAll our love,\n[Your Name]"
+    }
+]

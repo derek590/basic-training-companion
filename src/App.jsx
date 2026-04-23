@@ -1,9 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 
-// ─── BRANCH DATA ──────────────────────────────────────────────────────────────
+import "./style.scss";
+import BranchButton from "./Components/Card";
+
+// --- BRANCH DATA --------------------------------------------------------------
 const BRANCHES = {
   army: {
-    name: "Army", fullName: "United States Army",
+    name: "Army",
+    fullName: "United States Army",
+    icon: "🟢",
     trainingName: "Basic Combat Training (BCT)",
     color: "#4a7c59", accent: "#c8a84b", dark: "#1a2e1f",
     motto: "This We'll Defend", duration: 10,
@@ -64,6 +69,7 @@ const BRANCHES = {
   },
   airforce: {
     name: "Air Force", fullName: "United States Air Force",
+    icon: "🔵",
     trainingName: "Basic Military Training (BMT)",
     color: "#1a3a5c", accent: "#4a90d9", dark: "#0d1f33",
     motto: "Aim High... Fly-Fight-Win", duration: 8,
@@ -110,6 +116,7 @@ const BRANCHES = {
   },
   navy: {
     name: "Navy", fullName: "United States Navy",
+    icon: "⚓",
     trainingName: "Recruit Training Command (RTC)",
     color: "#1b2a4a", accent: "#c8960c", dark: "#0e1829",
     motto: "Forged by the Sea", duration: 8,
@@ -155,6 +162,7 @@ const BRANCHES = {
   },
   marines: {
     name: "Marines", fullName: "United States Marine Corps",
+    icon: "🔴",
     trainingName: "Marine Corps Recruit Training",
     color: "#8b0000", accent: "#c8a84b", dark: "#3d0000",
     motto: "Semper Fidelis - Always Faithful", duration: 13,
@@ -204,19 +212,75 @@ const BRANCHES = {
       { week: 13, title: "Graduation Week", events: ["Final drill evaluations", "Family Day", "Graduation ceremony", "Orders to MCT"] },
     ],
   },
+  coastguard: {
+    name: "Coast Guard", fullName: "United States Coast Guard",
+    icon: "🟡",
+    trainingName: "Recruit Training (Cape May, NJ)",
+    color: "#1a3a5c", accent: "#e87722", dark: "#0d1f33",
+    motto: "Semper Paratus - Always Ready", duration: 8,
+    ranks: [
+      { abbr: "SR", name: "Seaman Recruit", grade: "E-1" },
+      { abbr: "SA", name: "Seaman Apprentice", grade: "E-2" },
+      { abbr: "SN", name: "Seaman", grade: "E-3" },
+      { abbr: "PO3", name: "Petty Officer Third Class", grade: "E-4" },
+      { abbr: "PO2", name: "Petty Officer Second Class", grade: "E-5" },
+      { abbr: "PO1", name: "Petty Officer First Class", grade: "E-6" },
+      { abbr: "CPO", name: "Chief Petty Officer", grade: "E-7" },
+      { abbr: "SCPO", name: "Senior Chief Petty Officer", grade: "E-8" },
+      { abbr: "MCPO", name: "Master Chief Petty Officer", grade: "E-9" },
+    ],
+    acronyms: [
+      { abbr: "TRACEN", meaning: "Training Center Cape May (boot camp location)" },
+      { abbr: "CC", meaning: "Company Commander (like a Drill Instructor)" },
+      { abbr: "PT", meaning: "Physical Training" },
+      { abbr: "PRT", meaning: "Physical Readiness Test" },
+      { abbr: "USCG", meaning: "United States Coast Guard" },
+      { abbr: "SAR", meaning: "Search and Rescue" },
+      { abbr: "MLE", meaning: "Maritime Law Enforcement" },
+      { abbr: "NWU", meaning: "Navy Working Uniform (worn by Coast Guard)" },
+      { abbr: "XO", meaning: "Executive Officer (second in command)" },
+      { abbr: "CO", meaning: "Commanding Officer" },
+      { abbr: "A-School", meaning: "Coast Guard technical training after boot camp" },
+      { abbr: "TDY", meaning: "Temporary Duty Assignment" },
+    ],
+    keyTerms: [
+      { term: "Company Commander", def: "Coast Guard NCO responsible for training recruits - equivalent to Drill Instructor" },
+      { term: "Company", def: "Group of recruits trained together at Cape May" },
+      { term: "Cape May", def: "Cape May, New Jersey - the only Coast Guard recruit training location" },
+      { term: "Swab", def: "Nickname for a Coast Guard recruit during boot camp" },
+      { term: "Rack", def: "Bunk / sleeping area" },
+      { term: "Galley", def: "Kitchen / cafeteria" },
+      { term: "Heave To", def: "Coast Guard command to stop" },
+      { term: "Seamanship", def: "The art and skill of operating a vessel safely" },
+      { term: "SAR", def: "Search and Rescue - a primary Coast Guard mission" },
+      { term: "Pass in Review", def: "Coast Guard graduation parade ceremony" },
+      { term: "Liberty", def: "Authorized time off base" },
+      { term: "Semper Paratus", def: "Coast Guard motto meaning Always Ready" },
+    ],
+    weeklyEvents: [
+      { week: 1, title: "Arrival Week", events: ["Arrival at TRACEN Cape May", "In-processing and screenings", "Uniform and gear issue", "Company assignment", "Initial strength test"] },
+      { week: 2, title: "Week 1 - Foundations", events: ["Coast Guard core values instruction", "Close order drill begins", "Physical training program starts", "Seamanship basics introduction"] },
+      { week: 3, title: "Week 2 - Core Skills", events: ["First aid and CPR training", "Firefighting fundamentals", "Damage control basics", "Swimming qualification begins"] },
+      { week: 4, title: "Week 3 - Maritime Training", events: ["Advanced seamanship", "Navigation fundamentals", "Search and rescue overview", "Weapons familiarization"] },
+      { week: 5, title: "Week 4 - Law Enforcement", events: ["Maritime law enforcement training", "Use of force instruction", "Boarding team procedures", "Physical fitness advancement"] },
+      { week: 6, title: "Week 5 - Tactical Operations", events: ["Tactical training evolutions", "Team leadership challenges", "Advanced firefighting", "PRT practice"] },
+      { week: 7, title: "Week 6 - Final Training", events: ["Culminating training exercises", "Final PRT evaluation", "Inspection preparations", "Family notification window"] },
+      { week: 8, title: "Graduation Week", events: ["Final inspections", "Pass in Review ceremony", "Liberty granted", "Orders to A-School issued"] },
+    ],
+  },
 };
 
 const LETTER_TEMPLATES = [
   { id: "week1", title: "First Week Check-In", category: "Early Training",
-    body: `Dear [Recruit Name],\n\nWe're thinking of you every single moment. By now you've arrived, been processed, and are starting to find your footing. We know it's overwhelming right now — the noise, the pace, the new faces — but you were built for this.\n\nAt home, everything feels a little quieter without you here. We keep the routines going just like you'd want.\n\nWe are so incredibly proud of you. You took a step that most people only talk about. That takes real courage.\n\nWrite back when you can. We check the mailbox every single day.\n\nAll our love,\n[Your Name]` },
+    body: `Dear [Recruit Name],\n\nWe're thinking of you every single moment. By now you've arrived, been processed, and are starting to find your footing. We know it's overwhelming right now - the noise, the pace, the new faces - but you were built for this.\n\nAt home, everything feels a little quieter without you here. We keep the routines going just like you'd want.\n\nWe are so incredibly proud of you. You took a step that most people only talk about. That takes real courage.\n\nWrite back when you can. We check the mailbox every single day.\n\nAll our love,\n[Your Name]` },
   { id: "encouragement", title: "You've Got This", category: "Encouragement",
-    body: `Dear [Recruit Name],\n\nThere may be moments where you wonder if you can do this. You can. You absolutely can.\n\nThink about every hard thing you've overcome before. You faced those moments and came out stronger. This is no different — it's just bigger. Every hard day in training is building the person we already know you are.\n\nWe don't talk about how hard the waiting is here at home — because our job is to keep things light for you. But know that every night we think of you, and every morning we start the day with you in our hearts.\n\nKeep going. We'll be there cheering at graduation.\n\nWith so much love,\n[Your Name]` },
+    body: `Dear [Recruit Name],\n\nThere may be moments where you wonder if you can do this. You can. You absolutely can.\n\nThink about every hard thing you've overcome before. You faced those moments and came out stronger. This is no different - it's just bigger. Every hard day in training is building the person we already know you are.\n\nWe don't talk about how hard the waiting is here at home - because our job is to keep things light for you. But know that every night we think of you, and every morning we start the day with you in our hearts.\n\nKeep going. We'll be there cheering at graduation.\n\nWith so much love,\n[Your Name]` },
   { id: "news", title: "News from Home", category: "Stay Connected",
-    body: `Dear [Recruit Name],\n\nLife at home keeps moving, but it's not quite the same without you here.\n\nThis week a lot has happened that I know you'd want to hear about. [Share a news update — a family event, something funny, a neighbor's news, a pet story.]\n\nEveryone asks about you. They all send their love and want you to know they're proud.\n\nThe weather has been [describe the weather] — we keep thinking of you and wondering what it's like where you are.\n\nWe're keeping your room just as you left it. Everything is waiting for you.\n\nCounting the days,\n[Your Name]` },
+    body: `Dear [Recruit Name],\n\nLife at home keeps moving, but it's not quite the same without you here.\n\nThis week a lot has happened that I know you'd want to hear about. [Share a news update - a family event, something funny, a neighbor's news, a pet story.]\n\nEveryone asks about you. They all send their love and want you to know they're proud.\n\nThe weather has been [describe the weather] - we keep thinking of you and wondering what it's like where you are.\n\nWe're keeping your room just as you left it. Everything is waiting for you.\n\nCounting the days,\n[Your Name]` },
   { id: "midpoint", title: "Halfway There", category: "Milestone",
-    body: `Dear [Recruit Name],\n\nCan you believe it? You're past the halfway point. The finish line is real now — we can almost see it from here.\n\nLook how far you've come since that first week. Every early morning, every hard run, every moment of doubt you pushed through — that was you. That was your strength.\n\nWe've been tracking every week on our calendar here at home. We cross off each day together, getting closer to the moment we see your face again.\n\nThe graduation date is circled. We already have our plans. We cannot wait to see you walk across that field.\n\nAlmost there,\n[Your Name]` },
+    body: `Dear [Recruit Name],\n\nCan you believe it? You're past the halfway point. The finish line is real now - we can almost see it from here.\n\nLook how far you've come since that first week. Every early morning, every hard run, every moment of doubt you pushed through - that was you. That was your strength.\n\nWe've been tracking every week on our calendar here at home. We cross off each day together, getting closer to the moment we see your face again.\n\nThe graduation date is circled. We already have our plans. We cannot wait to see you walk across that field.\n\nAlmost there,\n[Your Name]` },
   { id: "graduation", title: "We'll Be There", category: "Graduation",
-    body: `Dear [Recruit Name],\n\nGraduation is close. We have our plans made, our bags ready, and our hearts full.\n\nI've been thinking about the moment I'll see your face — standing in formation, in uniform, having done something extraordinary. I don't know if I'll be able to hold it together. I probably won't.\n\nYou set out to do something hard and you did it. You became something. And you did it while we loved you from a distance, which is the hardest kind of loving there is.\n\nCome home proud. Come home rested when you can. And know that everything waiting for you here is better because you went.\n\nSee you at graduation.\n\nForever proud,\n[Your Name]` },
+    body: `Dear [Recruit Name],\n\nGraduation is close. We have our plans made, our bags ready, and our hearts full.\n\nI've been thinking about the moment I'll see your face - standing in formation, in uniform, having done something extraordinary. I don't know if I'll be able to hold it together. I probably won't.\n\nYou set out to do something hard and you did it. You became something. And you did it while we loved you from a distance, which is the hardest kind of loving there is.\n\nCome home proud. Come home rested when you can. And know that everything waiting for you here is better because you went.\n\nSee you at graduation.\n\nForever proud,\n[Your Name]` },
 ];
 
 const QUOTES = [
@@ -224,9 +288,9 @@ const QUOTES = [
   { quote: "Behind every strong soldier is an even stronger family.", author: "Military Family Wisdom" },
   { quote: "Distance means so little when someone means so much.", author: "Tom McNeal" },
   { quote: "Courage is not the absence of fear, but the judgment that something else is more important.", author: "Ambrose Redmoon" },
-  { quote: "They are not just fighting for their country — they are fighting for you.", author: "Unknown" },
+  { quote: "They are not just fighting for their country - they are fighting for you.", author: "Unknown" },
   { quote: "Strength doesn't come from what you can do. It comes from overcoming what you thought you couldn't.", author: "Rikki Rogers" },
-  { quote: "Waiting is the hardest part — but every day brings you closer.", author: "Military Family Wisdom" },
+  { quote: "Waiting is the hardest part - but every day brings you closer.", author: "Military Family Wisdom" },
   { quote: "Pride is the hardest emotion to explain and the easiest to feel.", author: "Military Family Wisdom" },
   { quote: "You don't have to be in uniform to serve with honor.", author: "Unknown" },
   { quote: "The soldier above all prays for peace, for it is the soldier who bears the deepest wounds.", author: "General Douglas MacArthur" },
@@ -243,7 +307,7 @@ const getCurrentWeek = sd => Math.max(1, Math.ceil(getDaysBetween(sd, new Date()
 const getTodayQuote = () => QUOTES[new Date().getDate() % QUOTES.length];
 const fmtDate = d => new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 
-// ── Confetti ──────────────────────────────────────────────────────────────────
+// -- Confetti ------------------------------------------------------------------
 function Confetti({ active }) {
   const ref = useRef(null);
   useEffect(() => {
@@ -280,7 +344,7 @@ function Confetti({ active }) {
   return <canvas ref={ref} style={{position:"fixed",top:0,left:0,width:"100%",height:"100%",pointerEvents:"none",zIndex:9999}} />;
 }
 
-// ── Graduation Celebration ────────────────────────────────────────────────────
+// -- Graduation Celebration ----------------------------------------------------
 function GraduationCelebration({ profile, branch, onDismiss }) {
   const [show, setShow] = useState(false);
   useEffect(() => { const t = setTimeout(() => setShow(true), 100); return () => clearTimeout(t); }, []);
@@ -294,7 +358,7 @@ function GraduationCelebration({ profile, branch, onDismiss }) {
         @keyframes shimmer { 0%{opacity:0.7} 50%{opacity:1} 100%{opacity:0.7} }
       `}</style>
       <div style={{background:`linear-gradient(135deg,${branch.dark},#050505)`,border:`2px solid ${acc}`,borderRadius:"20px",padding:"2.5rem 2rem",maxWidth:"400px",width:"100%",textAlign:"center",position:"relative",zIndex:1001,animation:show?"celebIn 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards":"none",opacity:show?1:0}}>
-        <div style={{fontSize:"4rem",marginBottom:"0.5rem",animation:"float 2s ease-in-out infinite"}}>🎓</div>
+        <div style={{fontSize:"4rem",marginBottom:"0.5rem",animation:"float 2s ease-in-out infinite"}}> </div>
         <h1 style={{color:acc,fontSize:"2rem",margin:"0 0 0.4rem",fontFamily:"Georgia,serif",letterSpacing:"0.03em"}}>They Did It!</h1>
         <p style={{color:"#fff",fontSize:"1.15rem",margin:"0 0 0.2rem",fontFamily:"Georgia,serif"}}>{profile.recruiterName}</p>
         <p style={{color:"#8a9bb0",fontFamily:"Georgia,serif",fontSize:"0.88rem",margin:"0 0 1.5rem"}}>has completed {branch.trainingName}</p>
@@ -305,14 +369,14 @@ function GraduationCelebration({ profile, branch, onDismiss }) {
           Your strength, love, and patience carried them through every hard day. This victory belongs to all of you.
         </p>
         <button onClick={onDismiss} style={{padding:"0.9rem 2rem",borderRadius:"10px",background:col,border:`2px solid ${acc}`,color:"#fff",fontSize:"1rem",fontWeight:"700",cursor:"pointer",fontFamily:"Georgia,serif",width:"100%"}}>
-          View Their Journey ★
+          View Their Journey  
         </button>
       </div>
     </div>
   );
 }
 
-// ── Notification Panel ────────────────────────────────────────────────────────
+// -- Notification Panel --------------------------------------------------------
 function NotificationPanel({ branch, profile, onClose }) {
   const [perm, setPerm] = useState(typeof Notification !== "undefined" ? Notification.permission : "default");
   const [schedule, setSchedule] = useState(() => {
@@ -354,10 +418,10 @@ function NotificationPanel({ branch, profile, onClose }) {
         </div>
         <p style={{color:"#6a7d90",fontSize:"0.68rem",letterSpacing:"0.12em",textTransform:"uppercase",margin:"0.75rem 0 0.6rem"}}>Notification preferences</p>
         {[
-          {k:"dailyQuote",label:"Daily Motivational Quote",desc:"New quote every morning at 8am",icon:"💬"},
-          {k:"weeklyPreview",label:"Weekly Training Preview",desc:"What your recruit is doing this week",icon:"📅"},
-          {k:"letterReminder",label:"Letter Reminder",desc:"Every Tuesday — reminder to send a letter",icon:"✉️"},
-          {k:"gradCountdown",label:"Graduation Milestones",desc:"Alerts at 30, 14, 7, and 1 day before graduation",icon:"🎓"},
+          {k:"dailyQuote",label:"Daily Motivational Quote",desc:"New quote every morning at 8am",icon:" "},
+          {k:"weeklyPreview",label:"Weekly Training Preview",desc:"What your recruit is doing this week",icon:" "},
+          {k:"letterReminder",label:"Letter Reminder",desc:"Every Tuesday - reminder to send a letter",icon:"  "},
+          {k:"gradCountdown",label:"Graduation Milestones",desc:"Alerts at 30, 14, 7, and 1 day before graduation",icon:" "},
         ].map(item => (
           <div key={item.k} style={{...cs,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
             <div style={{display:"flex",gap:"0.7rem",alignItems:"flex-start",flex:1}}>
@@ -377,7 +441,7 @@ function NotificationPanel({ branch, profile, onClose }) {
   );
 }
 
-// ── Paywall ───────────────────────────────────────────────────────────────────
+// -- Paywall -------------------------------------------------------------------
 function PaywallScreen({ branch, onUnlock }) {
   const [plan, setPlan] = useState("lifetime");
   const [loading, setLoading] = useState(false);
@@ -387,12 +451,12 @@ function PaywallScreen({ branch, onUnlock }) {
 
   const PLANS = [
     { id:"lifetime", label:"Lifetime Access", price: promoOk?"$9.99":"$14.99", period:"one-time purchase", badge:"BEST VALUE",
-      features:["Unlimited journal entries","Photo uploads","All 5 letter templates","Daily quotes & reminders","Full training timeline","Graduation celebration","Notification scheduling","Lifetime access — no subscription"] },
+      features:["Unlimited journal entries","Photo uploads","All 5 letter templates","Daily quotes & reminders","Full training timeline","Graduation celebration","Notification scheduling","Lifetime access - no subscription"] },
     { id:"monthly", label:"Monthly", price: promoOk?"$2.99":"$4.99", period:"per month",
       features:["Full app access during training","Journal + photo uploads","Letter templates","Daily quotes","Cancel anytime"] },
   ];
 
-  // ── Real Stripe Payment Links ──────────────────────────────────────────────
+  // -- Real Stripe Payment Links ----------------------------------------------
   const STRIPE_LINKS = {
     lifetime: "https://buy.stripe.com/14A7sDayF6h31o4gBrbII00",
     monthly:  "https://buy.stripe.com/bJeeV5ayF20NeaQclbbII01",
@@ -418,7 +482,7 @@ function PaywallScreen({ branch, onUnlock }) {
       <style>{`@keyframes pulse2{0%,100%{box-shadow:0 0 0 0 ${acc}44}50%{box-shadow:0 0 0 12px ${acc}00}}`}</style>
       <div style={{maxWidth:"460px",width:"100%"}}>
         <div style={{textAlign:"center",marginBottom:"1.75rem"}}>
-          <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>⭐</div>
+          <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}> </div>
           <h1 style={{color:"#fff",fontSize:"1.6rem",margin:"0 0 0.4rem"}}>Unlock Full Access</h1>
           <p style={{color:"#8a9bb0",margin:0,fontSize:"0.9rem"}}>Support {branch.name} families through every step of the journey</p>
           <div style={{width:"50px",height:"2px",background:acc,margin:"1rem auto 0"}}/>
@@ -427,7 +491,7 @@ function PaywallScreen({ branch, onUnlock }) {
         {/* Feature preview */}
         <div style={{background:`${col}20`,borderRadius:"14px",padding:"1rem 1.1rem",marginBottom:"1.5rem",border:`1px solid ${col}40`}}>
           <p style={{color:acc,fontSize:"0.68rem",textTransform:"uppercase",letterSpacing:"0.1em",margin:"0 0 0.65rem"}}>Everything included</p>
-          {["📅 Smart countdown tied to your recruit's exact dates","📖 Branch-specific glossary, acronyms & rank charts","📝 Memory journal with photo uploads","✉️ 5 personalizable letter templates","🔔 Daily motivational quotes & reminders","🎓 Graduation celebration animation","📱 Notification scheduling (OneSignal-ready)"].map((f,i) => (
+          {["  Smart countdown tied to your recruit's exact dates","  Branch-specific glossary, acronyms & rank charts","  Memory journal with photo uploads","   5 personalizable letter templates","  Daily motivational quotes & reminders","  Graduation celebration animation","  Notification scheduling (OneSignal-ready)"].map((f,i) => (
             <p key={i} style={{color:"#c0ccd8",fontSize:"0.85rem",margin:"0 0 0.35rem"}}>{f}</p>
           ))}
         </div>
@@ -487,7 +551,7 @@ function PaywallScreen({ branch, onUnlock }) {
   );
 }
 
-// ── Letter Templates ──────────────────────────────────────────────────────────
+// -- Letter Templates ----------------------------------------------------------
 function LetterTemplates({ branch, profile }) {
   const [sel, setSel] = useState(null);
   const [body, setBody] = useState("");
@@ -553,33 +617,34 @@ function LetterTemplates({ branch, profile }) {
   );
 }
 
-// ── Branch Selector ───────────────────────────────────────────────────────────
+// -- Branch Selector -----------------------------------------------------------
 function BranchSelector({ onSelect }) {
   const [hov, setHov] = useState(null);
   return (
     <div style={{minHeight:"100vh",background:"#0a0f1a",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"2rem",fontFamily:"Georgia,serif"}}>
       <div style={{textAlign:"center",marginBottom:"2.5rem"}}>
-        <div style={{color:"#fff", fontSize:"3rem",marginBottom:"0.5rem"}}>Stars</div>
+        <div style={{fontSize:"3rem",marginBottom:"0.5rem"}}>⭐</div>
         <h1 style={{color:"#fff",fontSize:"clamp(1.7rem,4vw,2.7rem)",fontWeight:"700",letterSpacing:"0.05em",margin:0}}>Basic Training Companion</h1>
         <p style={{color:"#8a9bb0",fontSize:"0.95rem",marginTop:"0.6rem",fontStyle:"italic"}}>For the families who wait, worry, and beam with pride</p>
         <div style={{width:"60px",height:"3px",background:"linear-gradient(90deg,#c8a84b,#4a90d9)",margin:"1.25rem auto 0"}}/>
       </div>
       <p style={{color:"#6a7d90",marginBottom:"1.25rem",fontSize:"0.9rem",textAlign:"center"}}>Select your loved one's branch to begin</p>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"1rem",maxWidth:"500px",width:"100%"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"1rem",maxWidth:"520px",width:"100%"}}>
         {Object.entries(BRANCHES).map(([k,b]) => (
-          <button key={k} onMouseEnter={() => setHov(k)} onMouseLeave={() => setHov(null)} onClick={() => onSelect(k)}
-            style={{background:hov===k?b.color:"rgba(255,255,255,0.05)",border:`2px solid ${hov===k?b.accent:"rgba(255,255,255,0.1)"}`,borderRadius:"14px",padding:"1.4rem 1rem",cursor:"pointer",transition:"all 0.25s",textAlign:"center",color:"#fff",fontFamily:"Georgia,serif"}}>
-            <div style={{fontSize:"1.9rem",marginBottom:"0.45rem"}}>{k==="army"?"Army Star":k==="airforce"?"Air Force Star":k==="navy"?"Anchor":"USMC"}</div>
-            <div style={{fontSize:"1rem",fontWeight:"700",letterSpacing:"0.04em"}}>{b.name}</div>
-            <div style={{fontSize:"0.7rem",color:hov===k?"rgba(255,255,255,0.75)":"#6a7d90",marginTop:"0.25rem",lineHeight:"1.3"}}>{b.trainingName}</div>
-          </button>
+          <BranchButton key={k} k={k} b={b} hov={hov} setHov={setHov} onSelect={onSelect}/>
+          // <button key={k} onMouseEnter={() => setHov(k)} onMouseLeave={() => setHov(null)} onClick={() => onSelect(k)} className="card"
+          //   style={{background:hov===k?b.color:"rgba(255,255,255,0.05)",border:`2px solid ${hov===k?b.accent:"rgba(255,255,255,0.1)"}`,borderRadius:"14px",padding:"1.4rem 1rem",cursor:"pointer",transition:"all 0.25s",textAlign:"center",color:"#fff",fontFamily:"Georgia,serif"}}>
+          //   <div style={{fontSize:"1.9rem",marginBottom:"0.45rem"}}>{k==="army"?"🟢":k==="airforce"?"🔵":k==="navy"?"⚓":k==="coastguard"?"🔴":""}</div>
+          //   <div style={{fontSize:"1rem",fontWeight:"700",letterSpacing:"0.04em"}}>{b.name}</div>
+          //   <div style={{fontSize:"0.7rem",color:hov===k?"rgba(255,255,255,0.75)":"#6a7d90",marginTop:"0.25rem",lineHeight:"1.3"}}>{b.trainingName}</div>
+          // </button>
         ))}
       </div>
     </div>
   );
 }
 
-// ── Setup Screen ──────────────────────────────────────────────────────────────
+// -- Setup Screen --------------------------------------------------------------
 function SetupScreen({ branch, onComplete }) {
   const [form, setForm] = useState({recruiterName:"",familyName:"",startDate:"",endDate:""});
   const [err, setErr] = useState("");
@@ -614,7 +679,7 @@ function SetupScreen({ branch, onComplete }) {
   );
 }
 
-// ── Countdown Ring ────────────────────────────────────────────────────────────
+// -- Countdown Ring ------------------------------------------------------------
 function Ring({ days, total, accent }) {
   const r=70, c=2*Math.PI*r, p=Math.max(0,Math.min(1,1-Math.max(0,days)/Math.max(1,total)));
   return (
@@ -629,7 +694,7 @@ function Ring({ days, total, accent }) {
   );
 }
 
-// ── Dashboard ─────────────────────────────────────────────────────────────────
+// -- Dashboard -----------------------------------------------------------------
 function Dashboard({ branchKey, branch, profile, onReset }) {
   const [tab, setTab] = useState("home");
   const [memories, setMemories] = useState([]);
@@ -719,7 +784,7 @@ function Dashboard({ branchKey, branch, profile, onReset }) {
             <p style={{margin:"0.12rem 0 0",color:"#8a9bb0",fontSize:"0.8rem"}}>Followed by {profile.familyName}</p>
           </div>
           <div style={{display:"flex",gap:"0.45rem"}}>
-            <button onClick={() => setNotifOpen(true)} style={{background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.15)",borderRadius:"8px",color:"#fff",padding:"0.38rem 0.6rem",cursor:"pointer",fontSize:"0.82rem"}}>Bell</button>
+            <button onClick={() => setNotifOpen(true)} style={{background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.15)",borderRadius:"8px",color:"#fff",padding:"0.38rem 0.6rem",cursor:"pointer",fontSize:"0.82rem"}}>🔔</button>
             <button onClick={onReset} style={{background:"transparent",border:"1px solid rgba(255,255,255,0.18)",borderRadius:"6px",color:"#8a9bb0",padding:"0.38rem 0.6rem",cursor:"pointer",fontSize:"0.7rem",fontFamily:"Georgia,serif"}}>Switch</button>
           </div>
         </div>
@@ -744,7 +809,7 @@ function Dashboard({ branchKey, branch, profile, onReset }) {
             <div style={{...cs,background:`linear-gradient(135deg,${col}40,rgba(0,0,0,0.3))`,border:`1px solid ${acc}40`,textAlign:"center"}}>
               {complete ? (
                 <div>
-                  <div style={{fontSize:"2.5rem"}}>Graduation Cap</div>
+                  <div style={{fontSize:"2.5rem"}}>🎓</div>
                   <h2 style={{color:acc,margin:"0.4rem 0"}}>Training Complete!</h2>
                   <p style={{color:"#8a9bb0",margin:"0 0 0.75rem"}}>Congratulations to {profile.recruiterName}!</p>
                   <button onClick={() => {setCelebDone(false); setShowCeleb(true);}} style={{padding:"0.45rem 1.15rem",borderRadius:"20px",background:`${acc}25`,border:`1px solid ${acc}`,color:acc,cursor:"pointer",fontSize:"0.82rem",fontFamily:"Georgia,serif"}}>Replay Celebration</button>
@@ -771,13 +836,13 @@ function Dashboard({ branchKey, branch, profile, onReset }) {
             {started && !complete && thisWeek && (
               <div style={cs}>
                 <p style={{color:acc,fontSize:"0.65rem",letterSpacing:"0.12em",textTransform:"uppercase",margin:"0 0 0.55rem"}}>This Week -- {thisWeek.title}</p>
-                {thisWeek.events.map((ev,i) => <div key={i} style={{display:"flex",gap:"0.5rem",marginBottom:"0.35rem"}}><span style={{color:acc,fontSize:"0.75rem",marginTop:"2px"}}>Right</span><span style={{color:"#c0ccd8",fontSize:"0.86rem"}}>{ev}</span></div>)}
+                {thisWeek.events.map((ev,i) => <div key={i} style={{display:"flex",gap:"0.5rem",marginBottom:"0.35rem"}}><span style={{color:acc,fontSize:"0.75rem",marginTop:"2px"}}>▸</span><span style={{color:"#c0ccd8",fontSize:"0.86rem"}}>{ev}</span></div>)}
               </div>
             )}
             {started && !complete && nextWeek && (
               <div style={{...cs,background:"rgba(255,255,255,0.03)"}}>
                 <p style={{color:"#6a7d90",fontSize:"0.65rem",letterSpacing:"0.12em",textTransform:"uppercase",margin:"0 0 0.55rem"}}>Coming Up -- Week {nextWeek.week}: {nextWeek.title}</p>
-                {nextWeek.events.slice(0,3).map((ev,i) => <div key={i} style={{display:"flex",gap:"0.5rem",marginBottom:"0.3rem"}}><span style={{color:"#6a7d90",fontSize:"0.75rem",marginTop:"2px"}}>Dot</span><span style={{color:"#8a9bb0",fontSize:"0.83rem"}}>{ev}</span></div>)}
+                {nextWeek.events.slice(0,3).map((ev,i) => <div key={i} style={{display:"flex",gap:"0.5rem",marginBottom:"0.3rem"}}><span style={{color:"#6a7d90",fontSize:"0.75rem",marginTop:"2px"}}>◦</span><span style={{color:"#8a9bb0",fontSize:"0.83rem"}}>{ev}</span></div>)}
               </div>
             )}
             <p style={{textAlign:"center",color:`${acc}55`,fontStyle:"italic",fontSize:"0.82rem",letterSpacing:"0.04em",padding:"0.4rem 0"}}>{branch.motto}</p>
@@ -802,7 +867,7 @@ function Dashboard({ branchKey, branch, profile, onReset }) {
                       <p style={{margin:0,fontWeight:"700",color:cur?acc:past?"#4a5d70":"#d0dce8",fontSize:"0.87rem"}}>{wk.title}</p>
                       {cur && <span style={{background:acc,color:"#000",fontSize:"0.6rem",padding:"2px 7px",borderRadius:"20px",fontWeight:"700"}}>NOW</span>}
                     </div>
-                    {wk.events.map((ev,j) => <div key={j} style={{color:past?"#3a4d60":"#8a9bb0",fontSize:"0.8rem",marginBottom:"0.18rem"}}>{past?"Check":". "} {ev}</div>)}
+                    {wk.events.map((ev,j) => <div key={j} style={{color:past?"#3a4d60":"#8a9bb0",fontSize:"0.8rem",marginBottom:"0.18rem"}}>{past?"✓":". "} {ev}</div>)}
                   </div>
                 </div>
               );
@@ -853,7 +918,7 @@ function Dashboard({ branchKey, branch, profile, onReset }) {
                 {[{id:"feeling",label:"Feeling"},{id:"call",label:"Call"},{id:"photo",label:"Moment"}].map(t => (
                   <button key={t.id} onClick={() => setNewMem(m => ({...m,type:t.id}))}
                     style={{padding:"0.32rem 0.65rem",borderRadius:"20px",border:`1px solid ${newMem.type===t.id?acc:"rgba(255,255,255,0.14)"}`,background:newMem.type===t.id?`${acc}28`:"transparent",color:newMem.type===t.id?acc:"#6a7d90",cursor:"pointer",fontSize:"0.76rem",fontFamily:"Georgia,serif"}}>
-                    {t.id==="feeling"?"Thought":t.id==="call"?"Phone":""} {t.label}
+                    {t.id==="feeling"?"💭":t.id==="call"?"📞":"📸"} {t.label}
                   </button>
                 ))}
               </div>
@@ -884,7 +949,7 @@ function Dashboard({ branchKey, branch, profile, onReset }) {
                       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
                         <div style={{flex:1}}>
                           <div style={{display:"flex",gap:"0.45rem",alignItems:"center",marginBottom:"0.3rem"}}>
-                            <span>{entry.type==="feeling"?"Thought":entry.type==="call"?"Phone":"Camera"}</span>
+                            <span>{entry.type==="feeling"?"💭":entry.type==="call"?"📞":"📸"}</span>
                             <span style={{color:acc,fontSize:"0.68rem",textTransform:"uppercase",letterSpacing:"0.07em"}}>{entry.type} . {entry.date}</span>
                           </div>
                           {entry.text && <p style={{color:"#d0dce8",margin:"0 0 0.45rem",fontSize:"0.86rem",lineHeight:"1.5"}}>{entry.text}</p>}
@@ -918,7 +983,7 @@ function Dashboard({ branchKey, branch, profile, onReset }) {
               <div key={r.id} style={{...cs,display:"flex",alignItems:"flex-start",gap:"0.65rem",opacity:r.done?0.48:1}}>
                 <button onClick={() => setReminders(rs => rs.map(x => x.id===r.id?{...x,done:!x.done}:x))}
                   style={{width:"21px",height:"21px",borderRadius:"50%",border:`2px solid ${r.done?acc:"rgba(255,255,255,0.28)"}`,background:r.done?acc:"transparent",flexShrink:0,cursor:"pointer",marginTop:"2px",display:"flex",alignItems:"center",justifyContent:"center",color:"#000",fontWeight:"700",fontSize:"0.68rem"}}>
-                  {r.done?"Check":""}
+                  {r.done?"✓":""}
                 </button>
                 <p style={{margin:0,flex:1,color:r.done?"#4a5d70":"#c0ccd8",fontSize:"0.86rem",textDecoration:r.done?"line-through":"none"}}>{r.text}</p>
                 <button onClick={() => setReminders(rs => rs.filter(x => x.id!==r.id))} style={{background:"transparent",border:"none",color:"#ff6b6b28",cursor:"pointer",fontSize:"0.95rem",padding:0}}>x</button>
@@ -938,7 +1003,7 @@ function Dashboard({ branchKey, branch, profile, onReset }) {
   );
 }
 
-// ── Root ──────────────────────────────────────────────────────────────────────
+// -- Root ----------------------------------------------------------------------
 export default function App() {
   const [stage, setStage] = useState("loading");
   const [bKey, setBKey] = useState(null);

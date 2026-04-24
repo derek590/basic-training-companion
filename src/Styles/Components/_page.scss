@@ -1,6 +1,7 @@
 @use "../Settings/vars" as *;
 
 .page{
+
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -8,5 +9,31 @@
     justify-content: center;
     padding: 2rem;
     font-family: "Georgia", serif;
-    background-color: $color-dark;
+    background-color: var(--background-color, $color-dark);
+
+    &__header{
+
+        text-align: center;
+        margin-bottom: 2.5rem;
+
+        &:after{
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg,$color-yellow,$color-blue);
+            margin: 1.25rem auto 0;
+        }
+    }
+
+    &__title{
+        color: $color-text-primary;
+        font-size: $font-size-xl;
+    }
+
+    &__subtitle{
+        font-style: italic;
+        font-size: $font-size-m;
+    }
+
 }

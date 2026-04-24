@@ -1,7 +1,11 @@
-export default function BranchButton({ branch, onSelect }) {
+import { useNavigate } from "react-router-dom";
+
+export default function BranchButton({ branch }) {
+  const navigate = useNavigate();
+
   return (
     <button
-      onClick={onSelect}
+      onClick={() => navigate(`/${branch.id}`)}
       className="card"
       style={{
         background: "rgba(255,255,255,0.05)",

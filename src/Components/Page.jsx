@@ -1,10 +1,11 @@
-const Page = ({ children, title, subtitle }) => {
+const Page = ({ children, title, subtitle, style }) => {
     return (
-        <div className="page">
+        <main className="page" style={style}>
+            {console.log(style)}
             <div className="container">
                 {children}
             </div>
-        </div>
+        </main>
     );
 };
 

@@ -39,8 +39,11 @@ export default function SetupScreen() {
   };
 
   return (
-    <Page>
-      <div style={{ minHeight: "100vh", background: branch.colors.dark, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "2rem", fontFamily: "Georgia,serif" }}>
+    <Page
+      style={{
+        "--background-color": branch.colors.dark,
+      }}
+    >
         <div style={{ maxWidth: "440px", width: "100%" }}>
           <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
             <h2 style={{ color: "#fff", fontSize: "1.7rem", margin: 0 }}>{branch.fullName}</h2>
@@ -77,8 +80,7 @@ export default function SetupScreen() {
               style={{ background: "transparent", border: "none", color: "#6a7d90", cursor: "pointer", fontSize: "0.88rem", fontFamily: "Georgia,serif" }}
             >
               Choose different branch
-            </button>
-          </div>
+          </button>
         </div>
       </div>
     </Page>

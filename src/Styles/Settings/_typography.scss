@@ -1,3 +1,13 @@
+@use "vars" as *;
+
 body{
     font-family: "Georgia", serif;
+    text-align: center;
+}
+
+.text{
+
+    &_secondary{
+        color: $color-text-secondary;
+    }
 }

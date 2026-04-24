@@ -1,9 +1,0 @@
-.card{
-
-    &:last-child:nth-child(odd){
-        justify-self: center;
-        width: 50%;
-        grid-column: span 2;
-    }
-
-}

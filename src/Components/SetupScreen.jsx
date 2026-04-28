@@ -2,16 +2,25 @@ import { useState } from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import Page from "./Page";
 import branches from "../Data/branches.json";
-import { saveToStorage } from "../utils";
+import { api } from "../api";
+import { useUser } from "../UserContext";
 
 export default function SetupScreen() {
   const { branchId } = useParams();
   const navigate = useNavigate();
+  const { refresh } = useUser();
   const branch = branches.find(b => b.id === branchId);
-  const [form, setForm] = useState({ recruiterName: "", familyName: "", startDate: "", endDate: "" });
+  const [form, setForm] = useState({
+    recruiterName: "",
+    familyName: "",
+    email: "",
+    startDate: "",
+    endDate: "",
+  });
   const [err, setErr] = useState("");
+  const [saving, setSaving] = useState(false);
 
-  if (!branch) return <Navigate to="/select" replace />;
+  if (!branch) return <Navigate to="/" replace />;
 
   const s = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -25,8 +34,8 @@ export default function SetupScreen() {
     textTransform: "uppercase", marginBottom: "0.35rem", display: "block",
   };
 
-  const submit = () => {
-    if (!form.recruiterName || !form.familyName || !form.startDate || !form.endDate) {
+  const submit = async () => {
+    if (!form.recruiterName || !form.familyName || !form.email || !form.startDate || !form.endDate) {
       setErr("Please fill in all fields.");
       return;
     }
@@ -34,52 +43,69 @@ export default function SetupScreen() {
       setErr("End date must be after start date.");
       return;
     }
-    saveToStorage({ branchId, profile: form });
-    navigate(localStorage.getItem("btc_paid") ? "/dashboard" : "/paywall");
+    setErr("");
+    setSaving(true);
+    try {
+      const { user } = await api.setup({
+        branchId,
+        recruitName: form.recruiterName,
+        familyName: form.familyName,
+        email: form.email,
+        startDate: form.startDate,
+        endDate: form.endDate,
+      });
+      await refresh();
+      const paid = user.plan && user.plan_status === "active";
+      navigate(paid ? "/dashboard" : "/paywall");
+    } catch (e) {
+      setErr(e.message || "Could not save. Please try again.");
+      setSaving(false);
+    }
   };
 
   return (
-    <Page
-      style={{
-        "--background-color": branch.colors.dark,
-      }}
-    >
-        <div style={{ maxWidth: "440px", width: "100%" }}>
-          <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
-            <h2 style={{ color: "#fff", fontSize: "1.7rem", margin: 0 }}>{branch.fullName}</h2>
-            <p style={{ color: branch.colors.accent, fontStyle: "italic", margin: "0.4rem 0" }}>{branch.motto}</p>
-            <div style={{ width: "45px", height: "2px", background: branch.colors.accent, margin: "0.85rem auto" }} />
-            <p style={{ color: "#8a9bb0", margin: 0, fontSize: "0.9rem" }}>Let's personalize your companion</p>
+    <Page style={{ "--background-color": branch.colors.dark }}>
+      <div style={{ maxWidth: "440px", width: "100%" }}>
+        <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
+          <h2 style={{ color: "#fff", fontSize: "1.7rem", margin: 0 }}>{branch.fullName}</h2>
+          <p style={{ color: branch.colors.accent, fontStyle: "italic", margin: "0.4rem 0" }}>{branch.motto}</p>
+          <div style={{ width: "45px", height: "2px", background: branch.colors.accent, margin: "0.85rem auto" }} />
+          <p style={{ color: "#8a9bb0", margin: 0, fontSize: "0.9rem" }}>Let's personalize your companion</p>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <div>
+            <label style={lbl}>Recruit's Name</label>
+            <input style={inp} placeholder="e.g. James Rivera" value={form.recruiterName} onChange={e => s("recruiterName", e.target.value)} />
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <div>
-              <label style={lbl}>Recruit's Name</label>
-              <input style={inp} placeholder="e.g. James Rivera" value={form.recruiterName} onChange={e => s("recruiterName", e.target.value)} />
-            </div>
-            <div>
-              <label style={lbl}>Your Name (Family Member)</label>
-              <input style={inp} placeholder="e.g. Maria Rivera" value={form.familyName} onChange={e => s("familyName", e.target.value)} />
-            </div>
-            <div>
-              <label style={lbl}>Training Start Date</label>
-              <input type="date" style={inp} value={form.startDate} onChange={e => s("startDate", e.target.value)} />
-            </div>
-            <div>
-              <label style={lbl}>Anticipated Graduation Date</label>
-              <input type="date" style={inp} value={form.endDate} onChange={e => s("endDate", e.target.value)} />
-            </div>
-            {err && <p style={{ color: "#ff6b6b", fontSize: "0.88rem", textAlign: "center", margin: 0 }}>{err}</p>}
-            <button
-              onClick={submit}
-              style={{ padding: "0.95rem", borderRadius: "10px", background: branch.colors.main, border: `2px solid ${branch.colors.accent}`, color: "#fff", fontSize: "1rem", fontWeight: "700", cursor: "pointer", fontFamily: "Georgia,serif", marginTop: "0.25rem" }}
-            >
-              Continue to App
-            </button>
-            <button
-              onClick={() => navigate("/")}
-              style={{ background: "transparent", border: "none", color: "#6a7d90", cursor: "pointer", fontSize: "0.88rem", fontFamily: "Georgia,serif" }}
-            >
-              Choose different branch
+          <div>
+            <label style={lbl}>Your Name (Family Member)</label>
+            <input style={inp} placeholder="e.g. Maria Rivera" value={form.familyName} onChange={e => s("familyName", e.target.value)} />
+          </div>
+          <div>
+            <label style={lbl}>Your Email</label>
+            <input type="email" style={inp} placeholder="you@example.com" value={form.email} onChange={e => s("email", e.target.value)} />
+          </div>
+          <div>
+            <label style={lbl}>Training Start Date</label>
+            <input type="date" style={inp} value={form.startDate} onChange={e => s("startDate", e.target.value)} />
+          </div>
+          <div>
+            <label style={lbl}>Anticipated Graduation Date</label>
+            <input type="date" style={inp} value={form.endDate} onChange={e => s("endDate", e.target.value)} />
+          </div>
+          {err && <p style={{ color: "#ff6b6b", fontSize: "0.88rem", textAlign: "center", margin: 0 }}>{err}</p>}
+          <button
+            onClick={submit}
+            disabled={saving}
+            style={{ padding: "0.95rem", borderRadius: "10px", background: branch.colors.main, border: `2px solid ${branch.colors.accent}`, color: "#fff", fontSize: "1rem", fontWeight: "700", cursor: saving ? "wait" : "pointer", fontFamily: "Georgia,serif", marginTop: "0.25rem", opacity: saving ? 0.7 : 1 }}
+          >
+            {saving ? "Saving..." : "Continue to App"}
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            style={{ background: "transparent", border: "none", color: "#6a7d90", cursor: "pointer", fontSize: "0.88rem", fontFamily: "Georgia,serif" }}
+          >
+            Choose different branch
           </button>
         </div>
       </div>

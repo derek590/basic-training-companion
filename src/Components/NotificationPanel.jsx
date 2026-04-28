@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { api } from "../api";
+import { useUser } from "../UserContext";
 
 export default function NotificationPanel({ branch, profile, onClose }) {
+  const { user, refresh } = useUser();
   const [perm, setPerm] = useState(
     typeof Notification !== "undefined" ? Notification.permission : "default"
   );
-  const [schedule, setSchedule] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("btc_notif") || "{}"); } catch { return {}; }
-  });
+  const [schedule, setSchedule] = useState(user?.notifPrefs || {});
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
   const col = branch.colors.main, acc = branch.colors.accent;
 
   const requestPerm = async () => {
@@ -22,10 +24,16 @@ export default function NotificationPanel({ branch, profile, onClose }) {
   };
 
   const toggle = k => setSchedule(s => ({ ...s, [k]: !s[k] }));
-  const save = () => {
-    localStorage.setItem("btc_notif", JSON.stringify(schedule));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const save = async () => {
+    setSaving(true);
+    try {
+      await api.savePreferences({ notifPrefs: schedule });
+      await refresh();
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const cs = { background: "rgba(255,255,255,0.05)", borderRadius: "12px", padding: "1rem", marginBottom: "0.65rem", border: "1px solid rgba(255,255,255,0.08)" };
@@ -86,8 +94,8 @@ export default function NotificationPanel({ branch, profile, onClose }) {
             </button>
           </div>
         ))}
-        <button onClick={save} style={{ width: "100%", padding: "0.85rem", borderRadius: "10px", background: col, border: `2px solid ${acc}`, color: "#fff", fontSize: "0.95rem", fontWeight: "700", cursor: "pointer", marginTop: "0.5rem" }}>
-          {saved ? "Saved!" : "Save Preferences"}
+        <button onClick={save} disabled={saving} style={{ width: "100%", padding: "0.85rem", borderRadius: "10px", background: col, border: `2px solid ${acc}`, color: "#fff", fontSize: "0.95rem", fontWeight: "700", cursor: saving ? "wait" : "pointer", marginTop: "0.5rem", opacity: saving ? 0.7 : 1 }}>
+          {saving ? "Saving..." : saved ? "Saved!" : "Save Preferences"}
         </button>
       </div>
     </div>

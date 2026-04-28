@@ -3,7 +3,9 @@
     "allow": [
       "Bash(npm info:*)",
       "Bash(npm install:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(grep -E '\\\\.\\(json|jsx?|tsx?|css|html\\)$')",
+      "Bash(npx vite *)"
     ]
   }
 }

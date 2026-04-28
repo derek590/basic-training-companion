@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import Page from "./Page";
 import Ring from "./Ring";
 import GraduationCelebration from "./GraduationCelebration";
@@ -7,43 +7,51 @@ import NotificationPanel from "./NotificationPanel";
 import LetterTemplates from "./LetterTemplates";
 import branches from "../Data/branches.json";
 import quotes from "../Data/quotes.json";
-import { LS_KEY, getDaysBetween, getDaysUntil, getCurrentWeek, getTodayQuote, fmtDate, loadFromStorage, saveToStorage } from "../utils";
+import { getDaysBetween, getDaysUntil, getCurrentWeek, getTodayQuote, fmtDate } from "../utils";
+import { api } from "../api";
+import { useUser } from "../UserContext";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { branchId, profile } = loadFromStorage();
+  const location = useLocation();
+  const { loading, user, branchId, profile, memories, reminders, refresh } = useUser();
   const branch = branches.find(b => b.id === branchId);
 
   const [tab, setTab] = useState("home");
-  const [memories, setMemories] = useState([]);
   const [newMem, setNewMem] = useState({ type: "feeling", text: "", photoPreview: null, photoName: null });
-  const [reminders, setReminders] = useState([
-    { id: 1, text: "Send your first letter this week!", done: false },
-    { id: 2, text: "Write down your feelings today", done: false },
-    { id: 3, text: "Connect with another military family", done: false },
-    { id: 4, text: "Prepare graduation weekend travel plans", done: false },
-  ]);
   const [search, setSearch] = useState("");
   const [notifOpen, setNotifOpen] = useState(false);
   const [showCeleb, setShowCeleb] = useState(false);
-  const [celebDone, setCelebDone] = useState(false);
   const [newRemText, setNewRemText] = useState("");
+  const [savingMem, setSavingMem] = useState(false);
   const fileRef = useRef(null);
 
+  // Confirm Stripe checkout if returning from payment.
   useEffect(() => {
-    try {
-      const d = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
-      if (d.memories) setMemories(d.memories);
-      if (d.reminders) setReminders(d.reminders);
-      if (d.celebDone) setCelebDone(true);
-    } catch (e) {}
-  }, []);
+    const params = new URLSearchParams(location.search);
+    const sessionId = params.get("session_id");
+    if (!sessionId) return;
+    (async () => {
+      try {
+        await api.confirmCheckout(sessionId);
+      } catch {
+        // Webhook will catch up; ignore client-side errors here.
+      } finally {
+        await refresh();
+        navigate("/dashboard", { replace: true });
+      }
+    })();
+  }, [location.search, navigate, refresh]);
 
+  // Trigger graduation celebration when training completes.
   useEffect(() => {
-    saveToStorage({ memories, reminders, celebDone });
-  }, [memories, reminders, celebDone]);
+    if (!user || !profile) return;
+    if (getDaysUntil(profile.endDate) < 0 && !user.celebDone) setShowCeleb(true);
+  }, [user, profile]);
 
-  if (!branch || !profile) return <Navigate to="/" replace />;
+  if (loading) return null;
+  if (!user || !branch || !profile) return <Navigate to="/" replace />;
+  if (!user.plan || user.planStatus !== "active") return <Navigate to="/paywall" replace />;
 
   const col = branch.colors.main, acc = branch.colors.accent;
   const daysStart = getDaysUntil(profile.startDate);
@@ -56,14 +64,18 @@ export default function Dashboard() {
   const nextWeek = branch.weeklyEvents.find(w => w.week === curWeek + 1);
   const quote = getTodayQuote(quotes);
 
-  useEffect(() => {
-    if (complete && !celebDone) setShowCeleb(true);
-  }, [complete, celebDone]);
+  const onReset = async () => {
+    await api.logout();
+    await refresh();
+    navigate("/");
+  };
 
-  const onReset = () => {
-    localStorage.removeItem(LS_KEY);
-    localStorage.removeItem("btc_paid");
-    navigate("/select");
+  const dismissCeleb = async () => {
+    setShowCeleb(false);
+    try {
+      await api.savePreferences({ celebDone: true });
+      await refresh();
+    } catch {}
   };
 
   const uploadPhoto = e => {
@@ -74,10 +86,52 @@ export default function Dashboard() {
     rd.readAsDataURL(f);
   };
 
-  const addMemory = () => {
+  const addMemory = async () => {
     if (!newMem.text.trim() && !newMem.photoPreview) return;
-    setMemories(m => [...m, { ...newMem, id: Date.now(), date: new Date().toLocaleDateString() }]);
-    setNewMem({ type: "feeling", text: "", photoPreview: null, photoName: null });
+    setSavingMem(true);
+    try {
+      await api.addMemory({
+        type: newMem.type,
+        text: newMem.text || null,
+        photoData: newMem.photoPreview || null,
+        photoName: newMem.photoName || null,
+      });
+      setNewMem({ type: "feeling", text: "", photoPreview: null, photoName: null });
+      await refresh();
+    } catch {} finally {
+      setSavingMem(false);
+    }
+  };
+
+  const removeMemory = async id => {
+    try {
+      await api.deleteMemory(id);
+      await refresh();
+    } catch {}
+  };
+
+  const addReminder = async () => {
+    const text = newRemText.trim();
+    if (!text) return;
+    try {
+      await api.addReminder(text);
+      setNewRemText("");
+      await refresh();
+    } catch {}
+  };
+
+  const toggleReminder = async r => {
+    try {
+      await api.updateReminder(r.id, !r.done);
+      await refresh();
+    } catch {}
+  };
+
+  const removeReminder = async id => {
+    try {
+      await api.deleteReminder(id);
+      await refresh();
+    } catch {}
   };
 
   const cs = { background: "rgba(255,255,255,0.05)", borderRadius: "13px", padding: "1rem 1.15rem", marginBottom: "0.85rem", border: "1px solid rgba(255,255,255,0.08)" };
@@ -100,8 +154,8 @@ export default function Dashboard() {
   return (
     <Page>
       <div style={{ minHeight: "100vh", background: branch.colors.dark, fontFamily: "Georgia,serif", color: "#fff", paddingBottom: "5rem" }}>
-        {showCeleb && !celebDone && (
-          <GraduationCelebration profile={profile} branch={branch} onDismiss={() => { setShowCeleb(false); setCelebDone(true); }} />
+        {showCeleb && !user.celebDone && (
+          <GraduationCelebration profile={profile} branch={branch} onDismiss={dismissCeleb} />
         )}
         {notifOpen && <NotificationPanel branch={branch} profile={profile} onClose={() => setNotifOpen(false)} />}
 
@@ -142,7 +196,7 @@ export default function Dashboard() {
                     <div style={{ fontSize: "2.5rem" }}>🎓</div>
                     <h2 style={{ color: acc, margin: "0.4rem 0" }}>Training Complete!</h2>
                     <p style={{ color: "#8a9bb0", margin: "0 0 0.75rem" }}>Congratulations to {profile.recruiterName}!</p>
-                    <button onClick={() => { setCelebDone(false); setShowCeleb(true); }} style={{ padding: "0.45rem 1.15rem", borderRadius: "20px", background: `${acc}25`, border: `1px solid ${acc}`, color: acc, cursor: "pointer", fontSize: "0.82rem", fontFamily: "Georgia,serif" }}>
+                    <button onClick={() => setShowCeleb(true)} style={{ padding: "0.45rem 1.15rem", borderRadius: "20px", background: `${acc}25`, border: `1px solid ${acc}`, color: acc, cursor: "pointer", fontSize: "0.82rem", fontFamily: "Georgia,serif" }}>
                       Replay Celebration
                     </button>
                   </div>
@@ -314,8 +368,8 @@ export default function Dashboard() {
                       style={{ position: "absolute", top: "6px", right: "6px", background: "rgba(0,0,0,0.7)", border: "none", color: "#fff", borderRadius: "50%", width: "22px", height: "22px", cursor: "pointer", fontSize: "0.75rem" }}>×</button>
                   </div>
                 )}
-                <button onClick={addMemory} style={{ marginTop: "0.62rem", padding: "0.58rem 1.15rem", borderRadius: "8px", background: col, border: `1px solid ${acc}`, color: "#fff", cursor: "pointer", fontSize: "0.86rem", fontFamily: "Georgia,serif" }}>
-                  Save to Journal
+                <button onClick={addMemory} disabled={savingMem} style={{ marginTop: "0.62rem", padding: "0.58rem 1.15rem", borderRadius: "8px", background: col, border: `1px solid ${acc}`, color: "#fff", cursor: savingMem ? "wait" : "pointer", fontSize: "0.86rem", fontFamily: "Georgia,serif", opacity: savingMem ? 0.7 : 1 }}>
+                  {savingMem ? "Saving..." : "Save to Journal"}
                 </button>
               </div>
               {memories.length === 0
@@ -334,7 +388,7 @@ export default function Dashboard() {
                             {entry.text && <p style={{ color: "#d0dce8", margin: "0 0 0.45rem", fontSize: "0.86rem", lineHeight: "1.5" }}>{entry.text}</p>}
                             {entry.photoPreview && <img src={entry.photoPreview} alt="memory" style={{ width: "100%", maxHeight: "190px", objectFit: "cover", borderRadius: "7px" }} />}
                           </div>
-                          <button onClick={() => setMemories(m => m.filter(e => e.id !== entry.id))} style={{ background: "transparent", border: "none", color: "#ff6b6b33", cursor: "pointer", fontSize: "1.1rem", padding: "0 0 0 0.4rem" }}>×</button>
+                          <button onClick={() => removeMemory(entry.id)} style={{ background: "transparent", border: "none", color: "#ff6b6b33", cursor: "pointer", fontSize: "1.1rem", padding: "0 0 0 0.4rem" }}>×</button>
                         </div>
                       </div>
                     ))}
@@ -354,12 +408,12 @@ export default function Dashboard() {
                 <input
                   value={newRemText}
                   onChange={e => setNewRemText(e.target.value)}
-                  onKeyDown={e => { if (e.key === "Enter" && newRemText.trim()) { setReminders(r => [...r, { id: Date.now(), text: newRemText.trim(), done: false }]); setNewRemText(""); } }}
+                  onKeyDown={e => { if (e.key === "Enter") addReminder(); }}
                   placeholder="Add a custom reminder..."
                   style={{ flex: 1, background: "transparent", border: "none", color: "#fff", fontSize: "0.86rem", outline: "none", fontFamily: "Georgia,serif" }}
                 />
                 <button
-                  onClick={() => { if (newRemText.trim()) { setReminders(r => [...r, { id: Date.now(), text: newRemText.trim(), done: false }]); setNewRemText(""); } }}
+                  onClick={addReminder}
                   style={{ padding: "0.38rem 0.7rem", borderRadius: "6px", background: col, border: `1px solid ${acc}`, color: "#fff", cursor: "pointer", fontSize: "0.78rem", fontFamily: "Georgia,serif" }}
                 >
                   Add
@@ -368,13 +422,13 @@ export default function Dashboard() {
               {reminders.map(r => (
                 <div key={r.id} style={{ ...cs, display: "flex", alignItems: "flex-start", gap: "0.65rem", opacity: r.done ? 0.48 : 1 }}>
                   <button
-                    onClick={() => setReminders(rs => rs.map(x => x.id === r.id ? { ...x, done: !x.done } : x))}
+                    onClick={() => toggleReminder(r)}
                     style={{ width: "21px", height: "21px", borderRadius: "50%", border: `2px solid ${r.done ? acc : "rgba(255,255,255,0.28)"}`, background: r.done ? acc : "transparent", flexShrink: 0, cursor: "pointer", marginTop: "2px", display: "flex", alignItems: "center", justifyContent: "center", color: "#000", fontWeight: "700", fontSize: "0.68rem" }}
                   >
                     {r.done ? "✓" : ""}
                   </button>
                   <p style={{ margin: 0, flex: 1, color: r.done ? "#4a5d70" : "#c0ccd8", fontSize: "0.86rem", textDecoration: r.done ? "line-through" : "none" }}>{r.text}</p>
-                  <button onClick={() => setReminders(rs => rs.filter(x => x.id !== r.id))} style={{ background: "transparent", border: "none", color: "#ff6b6b28", cursor: "pointer", fontSize: "0.95rem", padding: 0 }}>×</button>
+                  <button onClick={() => removeReminder(r.id)} style={{ background: "transparent", border: "none", color: "#ff6b6b28", cursor: "pointer", fontSize: "0.95rem", padding: 0 }}>×</button>
                 </div>
               ))}
               <div style={{ ...cs, background: `${col}10`, borderColor: `${col}30`, marginTop: "0.5rem" }}>

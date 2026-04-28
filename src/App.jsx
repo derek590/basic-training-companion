@@ -5,15 +5,18 @@ import BranchSelector from "./Components/BranchSelector";
 import SetupScreen from "./Components/SetupScreen";
 import PaywallScreen from "./Components/PaywallScreen";
 import Dashboard from "./Components/Dashboard";
+import { UserProvider } from "./UserContext";
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<BranchSelector />} />
-      <Route path="/:branchId" element={<SetupScreen />} />
-      <Route path="/paywall" element={<PaywallScreen />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <UserProvider>
+      <Routes>
+        <Route path="/" element={<BranchSelector />} />
+        <Route path="/:branchId" element={<SetupScreen />} />
+        <Route path="/paywall" element={<PaywallScreen />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </UserProvider>
   );
 }

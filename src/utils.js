@@ -1,5 +1,3 @@
-export const LS_KEY = "btc_v3";
-
 export const getDaysBetween = (a, b) =>
   Math.ceil((new Date(b) - new Date(a)) / 86400000);
 
@@ -23,17 +21,5 @@ export const fmtDate = d =>
     day: "numeric",
   });
 
-export const saveToStorage = data => {
-  try {
-    const existing = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
-    localStorage.setItem(LS_KEY, JSON.stringify({ ...existing, ...data }));
-  } catch (e) {}
-};
-
-export const loadFromStorage = () => {
-  try {
-    return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
-  } catch (e) {
-    return {};
-  }
-};
+// API serves dates as ISO timestamps; normalize back to YYYY-MM-DD for the helpers above.
+export const toDateOnly = d => (d ? String(d).slice(0, 10) : d);

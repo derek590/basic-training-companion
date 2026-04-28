@@ -2,49 +2,64 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import Page from "./Page";
 import branches from "../Data/branches.json";
-import { loadFromStorage } from "../utils";
+import { api } from "../api";
+import { useUser } from "../UserContext";
+
+const PLANS = [
+  {
+    id: "lifetime",
+    label: "Lifetime Access",
+    price: "$14.99",
+    period: "one-time purchase",
+    badge: "BEST VALUE",
+    features: [
+      "Unlimited journal entries",
+      "Photo uploads",
+      "All 5 letter templates",
+      "Daily quotes & reminders",
+      "Full training timeline",
+      "Graduation celebration",
+      "Notification scheduling",
+      "Lifetime access — no subscription",
+    ],
+  },
+  {
+    id: "monthly",
+    label: "Monthly",
+    price: "$4.99",
+    period: "per month",
+    features: [
+      "Full app access during training",
+      "Journal + photo uploads",
+      "Letter templates",
+      "Daily quotes",
+      "Cancel anytime",
+    ],
+  },
+];
 
 export default function PaywallScreen() {
-  const { branchId, profile } = loadFromStorage();
+  const { loading, user, branchId, profile } = useUser();
   const branch = branches.find(b => b.id === branchId);
   const [plan, setPlan] = useState("lifetime");
-  const [loading, setLoading] = useState(false);
-  const [promo, setPromo] = useState("");
-  const [promoOk, setPromoOk] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
 
-  if (!branch || !profile) return <Navigate to="/select" replace />;
+  if (loading) return null;
+  if (!branch || !profile) return <Navigate to="/" replace />;
+  if (user?.plan && user?.planStatus === "active") return <Navigate to="/dashboard" replace />;
 
   const col = branch.colors.main, acc = branch.colors.accent;
 
-  const PLANS = [
-    {
-      id: "lifetime", label: "Lifetime Access", price: promoOk ? "$9.99" : "$14.99",
-      period: "one-time purchase", badge: "BEST VALUE",
-      features: ["Unlimited journal entries", "Photo uploads", "All 5 letter templates", "Daily quotes & reminders", "Full training timeline", "Graduation celebration", "Notification scheduling", "Lifetime access - no subscription"],
-    },
-    {
-      id: "monthly", label: "Monthly", price: promoOk ? "$2.99" : "$4.99",
-      period: "per month",
-      features: ["Full app access during training", "Journal + photo uploads", "Letter templates", "Daily quotes", "Cancel anytime"],
-    },
-  ];
-
-  const STRIPE_LINKS = {
-    lifetime: "https://buy.stripe.com/14A7sDayF6h31o4gBrbII00",
-    monthly: "https://buy.stripe.com/bJeeV5ayF20NeaQclbbII01",
-  };
-
-  const checkout = () => {
-    setLoading(true);
-    localStorage.setItem("btc_pending_plan", plan);
-    window.location.href = STRIPE_LINKS[plan];
-  };
-
-  const applyPromo = () => {
-    if (["MILITARY10", "FAMILY10", "BOOTS2024"].includes(promo.toUpperCase())) {
-      setPromoOk(true);
-    } else {
-      alert("Invalid promo code. Try MILITARY10 for a discount.");
+  const checkout = async () => {
+    setBusy(true);
+    setErr("");
+    try {
+      const { url } = await api.checkout(plan);
+      window.location.href = url;
+    } catch (e) {
+      setErr(e.message || "Could not start checkout. Please try again.");
+      setBusy(false);
     }
   };
 
@@ -113,27 +128,18 @@ export default function PaywallScreen() {
             ))}
           </div>
 
-          <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.1rem" }}>
-            <input
-              value={promo}
-              onChange={e => setPromo(e.target.value)}
-              placeholder="Promo code (e.g. MILITARY10)"
-              style={{ flex: 1, padding: "0.62rem 0.85rem", borderRadius: "8px", border: `1px solid ${promoOk ? acc : "rgba(255,255,255,0.15)"}`, background: "rgba(255,255,255,0.07)", color: "#fff", fontSize: "0.82rem", outline: "none", fontFamily: "Georgia,serif" }}
-            />
-            <button
-              onClick={applyPromo}
-              style={{ padding: "0.62rem 1rem", borderRadius: "8px", background: promoOk ? `${acc}30` : "rgba(255,255,255,0.08)", border: `1px solid ${promoOk ? acc : "rgba(255,255,255,0.2)"}`, color: promoOk ? acc : "#8a9bb0", cursor: "pointer", fontSize: "0.82rem", whiteSpace: "nowrap" }}
-            >
-              {promoOk ? "Applied!" : "Apply"}
-            </button>
-          </div>
+          <p style={{ color: "#5a6d80", fontSize: "0.78rem", textAlign: "center", margin: "0 0 1rem" }}>
+            Have a promo code? Enter it on the secure Stripe checkout page.
+          </p>
+
+          {err && <p style={{ color: "#ff6b6b", fontSize: "0.85rem", textAlign: "center", margin: "0 0 0.75rem" }}>{err}</p>}
 
           <button
             onClick={checkout}
-            disabled={loading}
-            style={{ width: "100%", padding: "1rem", borderRadius: "12px", background: loading ? `${col}70` : `linear-gradient(135deg,${col},${col}bb)`, border: `2px solid ${acc}`, color: "#fff", fontSize: "1rem", fontWeight: "700", cursor: loading ? "wait" : "pointer", fontFamily: "Georgia,serif", letterSpacing: "0.03em" }}
+            disabled={busy}
+            style={{ width: "100%", padding: "1rem", borderRadius: "12px", background: busy ? `${col}70` : `linear-gradient(135deg,${col},${col}bb)`, border: `2px solid ${acc}`, color: "#fff", fontSize: "1rem", fontWeight: "700", cursor: busy ? "wait" : "pointer", fontFamily: "Georgia,serif", letterSpacing: "0.03em" }}
           >
-            {loading ? "Processing..." : `Unlock Now — ${selectedPlan?.price}`}
+            {busy ? "Redirecting to Stripe..." : `Unlock Now — ${selectedPlan?.price}`}
           </button>
 
           <div style={{ display: "flex", justifyContent: "center", gap: "1.25rem", marginTop: "0.85rem", flexWrap: "wrap" }}>
@@ -142,13 +148,7 @@ export default function PaywallScreen() {
             ))}
           </div>
 
-          <div style={{ marginTop: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "10px", padding: "0.85rem 1rem", border: "1px solid rgba(255,255,255,0.07)" }}>
-            <p style={{ color: "#5a6d80", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.08em", margin: "0 0 0.4rem" }}>Developer Integration Note</p>
-            <p style={{ color: "#4a5d70", fontSize: "0.76rem", lineHeight: "1.5", margin: 0 }}>
-              Replace the <code style={{ color: acc }}>checkout()</code> function with your Stripe backend. Create a checkout session via <code style={{ color: acc }}>POST /api/create-checkout-session</code>, redirect to <code style={{ color: acc }}>session.url</code>, and handle the <code style={{ color: acc }}>checkout.session.completed</code> webhook to grant permanent access.
-            </p>
-          </div>
-          <p style={{ color: "#2a3d50", fontSize: "0.72rem", textAlign: "center", marginTop: "0.75rem", lineHeight: "1.5" }}>
+          <p style={{ color: "#2a3d50", fontSize: "0.72rem", textAlign: "center", marginTop: "1.25rem", lineHeight: "1.5" }}>
             By purchasing you agree to our Terms of Service and Privacy Policy.
           </p>
         </div>

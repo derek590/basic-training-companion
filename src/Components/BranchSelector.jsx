@@ -38,7 +38,7 @@ export default function BranchSelector() {
         <p className="page__subtitle text_secondary">For the families who wait, worry, and beam with pride</p>
       </header>
         <p className="text_secondary">Select your loved one's branch to begin</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "1rem", maxWidth: "520px", width: "100%" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "1rem", maxWidth: "520px", width: "100%", margin: "0 auto" }}>
           {branches.map(branch => (
             <BranchButton
               key={branch.id}
